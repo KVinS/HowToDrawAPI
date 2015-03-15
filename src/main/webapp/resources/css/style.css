@@ -1,0 +1,167 @@
+::-webkit-scrollbar {
+    width: 0.6em;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+}
+
+.card-title {
+    clear: both;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.card-panel .row {
+    margin-bottom: 0;
+}
+
+.card-panel {
+    padding: 14px;
+}
+
+span.badge.new:after {
+    content: " new";
+}
+
+nav {
+    color: #fff;
+    background-color: #4d7198;
+    width: 100%;
+    height: 56px;
+    line-height: 56px;
+}
+
+.card a {
+    color: #4d7198;
+}
+
+.card a:hover {
+    color: #7E99B8;
+}
+
+.collection-header {
+    padding: 0 20px;
+}
+
+.collection-header h4{
+    font-size: 1.5rem;
+    line-height: 2.508rem;
+    margin: 1.14rem 0 0.912rem 0;
+}
+
+.collection.with-header .collection-item {
+    padding-left: 20px;
+}
+
+body {
+    width: 1000px;
+    margin: auto;
+}
+
+.card .card-content {
+    padding: 8px;
+}
+.card .card-reveal {
+    padding: 8px;
+}
+
+.card-title .paragraph-end {
+    height: 19px;
+    width: 45px;
+    background-image: -webkit-gradient(linear,left top,right top,color-stop(0%,rgba(255,255,255,0)),color-stop(100%,rgba(255,255,255,1)));
+    background-image: -webkit-linear-gradient(left,rgba(255,255,255,0),rgba(255,255,255,1));
+    background: linear-gradient(to right,rgba(255,255,255,0),rgba(255,255,255,1));
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1,StartColorStr='#00ffffff',EndColorStr='#ffffff');
+    bottom: 0;
+    max-height: 100%;
+    position: absolute;
+    right: 0;
+}
+
+.lesson-title .paragraph-end, .card-title .paragraph-end {
+    height: 19px;
+    width: 45px;
+    background-image: -webkit-gradient(linear,left top,right top,color-stop(0%,rgba(255,255,255,0)),color-stop(100%,rgba(255,255,255,1)));
+    background-image: -webkit-linear-gradient(left,rgba(255,255,255,0),rgba(255,255,255,1));
+    background: linear-gradient(to right,rgba(255,255,255,0),rgba(255,255,255,1));
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1,StartColorStr='#00ffffff',EndColorStr='#ffffff');
+    max-height: 100%;
+    position: absolute;
+    right: 11px;
+}
+
+.row .col.img-holder {
+    padding: 0;
+}
+
+.card .card-title {
+    font-size: 16px;
+    position: relative;
+}
+
+.card .card-content .card-title {
+    line-height: 35px;
+}
+
+.card-popular {
+    height: 245px;
+}
+
+.navigation-btn {
+    position: absolute;
+    left: auto;
+    right: -1px;
+    top: 0px;
+}
+
+.card-panel {
+    width: 100%;
+}
+
+.template {
+    display: none;
+}
+
+.progress .determinate.complexity-0 {
+    background-color: #1bc908;
+    width: 25%;
+}
+
+.progress .determinate.complexity-1 {
+    background-color: #c7c930;
+    width: 50%;
+}
+
+.progress .determinate.complexity-2 {
+    background-color: #c9662a;
+    width: 75%;
+}
+
+.progress .determinate.complexity-3 {
+    background-color: #c92316;
+    width: 100%
+}
+
+.row.complexity-bar .col {
+    padding: 0 0;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+.complexity-bar .progress {
+    padding-top: 8px;
+    margin-top: 7px;
+}
+
+.lesson-title {
+    display: block;
+    clear: both;
+    overflow: hidden;
+    white-space: nowrap;
+}
