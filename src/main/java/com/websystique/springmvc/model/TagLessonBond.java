@@ -17,8 +17,8 @@ import javax.persistence.Table;
  * @author KVinS
  */
 
-@Entity
-@Table(name="TAGS_AND_LESSONS_BOUNDS")
+//@Entity
+//@Table(name="TAGS_AND_LESSONS_BOUNDS")
 public class TagLessonBond {
     @Id
     @Column(name = "ID")

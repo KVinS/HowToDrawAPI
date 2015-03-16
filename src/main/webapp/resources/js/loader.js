@@ -17,7 +17,7 @@ var loadPopular = function() {
         clone = clone.children(0);
 
         var title = data.titleEn;
-        var coverUri = "http://howtodraw.azurewebsites.net/HowToDraw/API/lesson_prev/"+ data.id;
+        var coverUri = "/HowToDraw/API/lesson_prev/"+ data.id;
         var description = "Как рисовать " + data.titleEn;
         var link = data.link;
         var complexity = data.complexity;
@@ -33,7 +33,7 @@ var loadPopular = function() {
     }
 
     return function() {
-   $.ajax({url: "http://howtodraw.azurewebsites.net/HowToDraw/API/lessons/0?sort=VIEWS", contentType: "application/json", dataType: "json"})
+   $.ajax({url: "/HowToDraw/API/lessons/0?sort=VIEWS", contentType: "application/json", dataType: "json"})
 //        getMockPopular()
             .done(function(data) {
             if (data.success) {
@@ -61,7 +61,7 @@ var loadNew = function() {
         clone = clone.children(0);
 
         var title = data.titleEn;
-        var coverUri = "http://howtodraw.azurewebsites.net/HowToDraw/API/lesson_prev/"+ data.id;
+        var coverUri = "/HowToDraw/API/lesson_prev/"+ data.id;
         var description = data.titleEn;
         var link = data.link;
         var complexity = data.complexity;
@@ -76,7 +76,7 @@ var loadNew = function() {
     }
 
     return function() {
-   $.ajax({url: "http://howtodraw.azurewebsites.net/HowToDraw/API/lessons/0?sort=NEW", contentType: "application/json", dataType: "json"})
+   $.ajax({url: "/HowToDraw/API/lessons/0?sort=NEW", contentType: "application/json", dataType: "json"})
        //getMockNew()
         .done(function(data) {
             if (data.success) {

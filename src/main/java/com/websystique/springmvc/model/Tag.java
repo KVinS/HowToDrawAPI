@@ -5,32 +5,51 @@
  */
 package com.websystique.springmvc.model;
 
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
  *
  * @author KVinS
  */
-
 @Entity
-@Table(name="TAGS")
+@Table(name = "TAGS")
 public class Tag {
+
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
     @Column(name = "TITLE", nullable = false)
     private String title;
-    
     @Column(name = "TITLE_EN", nullable = false)
     private String titleEn;
+    
+    @ManyToMany(mappedBy = "tags")
+    private Set<Lesson> lessons;
 
+    public Set<Lesson> getLessons() {
+        return lessons;
+    }
+
+    public void setLessons(Set<Lesson> lessons) {
+        this.lessons = lessons;
+    }
+
+    
+    
     public Integer getId() {
         return id;
     }
@@ -54,5 +73,4 @@ public class Tag {
     public void setTitleEn(String titleEn) {
         this.titleEn = titleEn;
     }
-  
 }

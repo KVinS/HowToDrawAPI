@@ -7,9 +7,12 @@ package com.websystique.springmvc.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -25,14 +28,26 @@ public class TagSynonym {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    @Column(name = "TAG_ID", nullable = false)
-    private Integer tagId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TAG_ID", referencedColumnName = "ID")
+    private Tag tag;
     
     @Column(name = "TITLE", nullable = false)
     private String title;
     
     @Column(name = "LANGUAGE", nullable = true)
     private String language;
+    
+
+
+
+    public Tag getTag() {
+        return tag;
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
 
     public Integer getId() {
         return id;
@@ -40,14 +55,6 @@ public class TagSynonym {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getTagId() {
-        return tagId;
-    }
-
-    public void setTagId(Integer tagId) {
-        this.tagId = tagId;
     }
 
     public String getTitle() {

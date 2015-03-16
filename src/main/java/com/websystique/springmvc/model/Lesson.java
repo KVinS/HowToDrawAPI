@@ -5,59 +5,72 @@
  */
 package com.websystique.springmvc.model;
 
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author KVinS
  */
-
 @Entity
-@Table(name="LESSONS")
+@Table(name = "LESSONS")
 public class Lesson {
+
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
     @Column(name = "TITLE", nullable = false)
     private String title;
-    
     @Column(name = "TITLE_EN", nullable = false)
     private String titleEn;
-    
     //Рейтинг
     @Column(name = "RATING", nullable = false)
     private int rating;
-    
     //Просмотров за день
     @Column(name = "VIEWS", nullable = false)
     private int views;
-    
     @Column(name = "CHAPTER", nullable = false)
     private String chapter;
-    
     //Рейтинг
     @Column(name = "LOCAL_ID", nullable = false)
     private int localId;
-    
     //Сложность 0-3
     @Column(name = "COMPLEXITY", nullable = false)
     private int complexity;
-
     //Шагов
     @Column(name = "STEPS", nullable = false)
     private int steps;
-    
     //Формат
     @Column(name = "FORMAT", nullable = false)
     private String format;
-    
+    @ManyToMany
+    @JoinTable(name = "TAGS_AND_LESSONS_BOUNDS",
+            joinColumns = {
+        @JoinColumn(name = "LESSON_ID")},
+            inverseJoinColumns = {
+        @JoinColumn(name = "TAG_ID")})
+    private Set<Tag> tags;
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -137,5 +150,4 @@ public class Lesson {
     public void setFormat(String format) {
         this.format = format;
     }
-    
 }
