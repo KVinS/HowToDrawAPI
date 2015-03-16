@@ -26,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.servlet.http.HttpServletResponse;
+import org.hibernate.Hibernate;
 import org.json.simple.JSONObject;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -61,8 +62,8 @@ public class AppController {
     public @ResponseBody
     void getLesson(ModelMap model, @PathVariable Integer id, @RequestParam Integer step, HttpServletResponse response) throws IOException {
 
-        
-        
+
+
         Lesson l = lessonsService.getLesson(id);
 
         if (step > l.getSteps()) {
@@ -104,8 +105,6 @@ public class AppController {
         }
     }
 
- 
-
     @RequestMapping(value = {"/API/lessons/{page}"}, method = RequestMethod.GET)
     public @ResponseBody
     JSONObject getLessons(ModelMap model, @PathVariable Integer page, @RequestParam SortType sort) {
@@ -125,8 +124,7 @@ public class AppController {
         obj.put("success", true);
         return obj;
     }
-    
-    
+
     @RequestMapping(value = {"/API/search/{page}"}, method = RequestMethod.POST)
     public @ResponseBody
     JSONObject getHints(ModelMap model, @PathVariable Integer page, @RequestParam String q) {
@@ -139,7 +137,7 @@ public class AppController {
 
     @RequestMapping(value = {"/API/chapters/{page}"}, method = RequestMethod.GET)
     public @ResponseBody
-   JSONObject getChapters(ModelMap model, @PathVariable Integer page, @RequestParam SortType sort) {
+    JSONObject getChapters(ModelMap model, @PathVariable Integer page, @RequestParam SortType sort) {
         List<Chapter> chapters = chaptersService.getChapters(page, sort);
         JSONObject obj = new JSONObject();
         obj.put("chapters", chapters);

@@ -18,6 +18,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+import javax.transaction.Transactional;
+import org.hibernate.Hibernate;
 
 /**
  *
@@ -63,6 +66,7 @@ public class Lesson {
         @JoinColumn(name = "TAG_ID")})
     private Set<Tag> tags;
 
+    @Transient
     public Set<Tag> getTags() {
         return tags;
     }

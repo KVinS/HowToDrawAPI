@@ -19,6 +19,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -37,9 +39,11 @@ public class Tag {
     @Column(name = "TITLE_EN", nullable = false)
     private String titleEn;
     
+
     @ManyToMany(mappedBy = "tags")
     private Set<Lesson> lessons;
 
+    @JsonIgnore
     public Set<Lesson> getLessons() {
         return lessons;
     }
@@ -47,8 +51,6 @@ public class Tag {
     public void setLessons(Set<Lesson> lessons) {
         this.lessons = lessons;
     }
-
-    
     
     public Integer getId() {
         return id;
