@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.websystique.springmvc.model.Employee;
 import com.websystique.springmvc.model.Lesson;
+import com.websystique.springmvc.model.Tag;
 import com.websystique.springmvc.model.TagSynonym;
 import com.websystique.springmvc.service.ChapterService;
-import com.websystique.springmvc.service.EmployeeService;
 import com.websystique.springmvc.service.LessonService;
 import com.websystique.springmvc.service.SearchService;
 import com.websystique.springmvc.service.TagService;
@@ -36,8 +35,7 @@ import ru.kvins.draw.Utilites.SortType;
 @RequestMapping("/")
 public class AppController {
 
-    @Autowired
-    EmployeeService service;
+
     @Autowired
     LessonService lessonsService;
     @Autowired
@@ -47,16 +45,6 @@ public class AppController {
     @Autowired
     SearchService searchService;
 
-    /*
-     * This method will list all existing employees.
-     */
-    @RequestMapping(value = {"/", "/list"}, method = RequestMethod.GET)
-    public String listEmployees(ModelMap model) {
-
-        List<Employee> employees = service.findAllEmployees();
-        model.addAttribute("employees", employees);
-        return "allemployees";
-    }
 
     @RequestMapping(value = {"/API/lesson/{id}"}, method = RequestMethod.GET)
     public @ResponseBody
@@ -107,8 +95,15 @@ public class AppController {
 
     @RequestMapping(value = {"/API/lessons/{page}"}, method = RequestMethod.GET)
     public @ResponseBody
-    JSONObject getLessons(ModelMap model, @PathVariable Integer page, @RequestParam SortType sort) {
-        List<Lesson> lessons = lessonsService.getLessons(page, sort);
+    JSONObject getLessons(ModelMap model, @PathVariable Integer page, @RequestParam(value = "sort", required = false, defaultValue = "NEW") SortType sort, @RequestParam(value = "tag", required = false) Integer tag) {
+        List<Lesson> lessons;
+        if (tag != null) {
+            //lessons= lessonsService.getLessonsByTag(tag, page, sort);
+            Tag st = tagsService.getTag(tag);
+            lessons = st.getLessons(page);
+        } else {
+            lessons = lessonsService.getLessons(page, sort);
+        }
         JSONObject obj = new JSONObject();
         obj.put("lessons", lessons);
         obj.put("success", true);
@@ -137,7 +132,7 @@ public class AppController {
 
     @RequestMapping(value = {"/API/chapters/{page}"}, method = RequestMethod.GET)
     public @ResponseBody
-    JSONObject getChapters(ModelMap model, @PathVariable Integer page, @RequestParam SortType sort) {
+    JSONObject getChapters(ModelMap model, @PathVariable Integer page, @RequestParam(value = "sort", required = false, defaultValue = "NEW") SortType sort) {
         List<Chapter> chapters = chaptersService.getChapters(page, sort);
         JSONObject obj = new JSONObject();
         obj.put("chapters", chapters);
@@ -164,47 +159,12 @@ public class AppController {
         //return lessons;
     }
 
-    @RequestMapping(value = {"/g"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String openGeneral(ModelMap model) {
         //Employee employee = new Employee();
         //model.addAttribute("employee", employee);
         return "general";
     }
 
-    /*
-     * This method will provide the medium to add a new employee.
-     */
-    @RequestMapping(value = {"/new"}, method = RequestMethod.GET)
-    public String newEmployee(ModelMap model) {
-        Employee employee = new Employee();
-        model.addAttribute("employee", employee);
-        return "registration";
-    }
 
-    /*
-     * This method will be called on form submission, handling POST request for
-     * saving employee in database. It also validates the user input
-     */
-    @RequestMapping(value = {"/new"}, method = RequestMethod.POST)
-    public String saveEmployee(@Valid Employee employee, BindingResult result, ModelMap model) {
-
-        if (result.hasErrors()) {
-            return "registration";
-        }
-
-        service.saveEmployee(employee);
-
-        model.addAttribute("succss", "Employee " + employee.getName()
-                + " registered successfully");
-        return "success";
-    }
-
-    /*
-     * This method will delete an employee by it's SSN value.
-     */
-    @RequestMapping(value = {"/delete-{ssn}-employee"}, method = RequestMethod.GET)
-    public String deleteEmployee(@PathVariable String ssn) {
-        service.deleteEmployeeBySsn(ssn);
-        return "redirect:/list";
-    }
 }

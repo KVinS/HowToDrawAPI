@@ -20,6 +20,7 @@ import org.hibernate.criterion.Expression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
+import ru.kvins.draw.Parameters;
 
 /**
  *
@@ -28,7 +29,7 @@ import org.springframework.stereotype.Repository;
 @Repository("lessonDao")
 public class LessonDAO extends SuperDAO {
 
-    private final static int lessonsCol = 6;
+
 
     @SuppressWarnings("unchecked")
     public List<Lesson> getLessons(int page, String orderby, String sorter) {
@@ -36,7 +37,7 @@ public class LessonDAO extends SuperDAO {
         Query query = getSession().createSQLQuery(sql).addEntity(Lesson.class);
 
         query.setFirstResult(page);
-        query.setMaxResults(lessonsCol);
+        query.setMaxResults(Parameters.maxLessonsInResult);
         List<Lesson> list = query.list();
         return list;
     }
@@ -50,7 +51,7 @@ public class LessonDAO extends SuperDAO {
         String sql = "SELECT * FROM lessons WHERE ID IN (SELECT LESSON_ID FROM tags_and_lessons_bounds WHERE TAG_ID IN (SELECT DISTINCT TAG_ID FROM tags_synonyms WHERE TITLE LIKE :squery))";
         Query query = getSession().createSQLQuery(sql).addEntity(Lesson.class);
         query.setParameter("squery", "%" + squery + "%");
-        query.setMaxResults(lessonsCol);
+        query.setMaxResults(maxLessonsInResult);
         query.setFirstResult(page);
         List<Lesson> list = query.list();
         return list;

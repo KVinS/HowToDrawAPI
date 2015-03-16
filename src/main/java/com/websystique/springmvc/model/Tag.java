@@ -5,6 +5,8 @@
  */
 package com.websystique.springmvc.model;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,6 +23,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import ru.kvins.draw.Parameters;
 
 /**
  *
@@ -38,20 +41,34 @@ public class Tag {
     private String title;
     @Column(name = "TITLE_EN", nullable = false)
     private String titleEn;
-    
-
     @ManyToMany(mappedBy = "tags")
-    private Set<Lesson> lessons;
+    private List<Lesson> lessons;
 
     @JsonIgnore
-    public Set<Lesson> getLessons() {
-        return lessons;
+    public List<Lesson> getLessons(int page) {
+        int start = Parameters.maxLessonsInResult * page;
+        int finish = start + Parameters.maxLessonsInResult;
+
+        if (finish > lessons.size()) {
+            finish = lessons.size();
+            start = finish - Parameters.maxLessonsInResult;
+            if (start < 0) {
+                start = 0;
+            }
+        }
+
+        List<Lesson> l = new LinkedList<Lesson>();
+
+        for (int i = start; i < finish; i++) {
+            l.add(lessons.get(i));
+        }
+        return l;
     }
 
-    public void setLessons(Set<Lesson> lessons) {
+    public void setLessons(List<Lesson> lessons) {
         this.lessons = lessons;
     }
-    
+
     public Integer getId() {
         return id;
     }

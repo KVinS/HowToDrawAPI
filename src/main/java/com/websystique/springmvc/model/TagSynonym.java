@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -28,6 +29,7 @@ public class TagSynonym {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TAG_ID", referencedColumnName = "ID")
     private Tag tag;
@@ -38,9 +40,6 @@ public class TagSynonym {
     @Column(name = "LANGUAGE", nullable = true)
     private String language;
     
-
-
-
     public Tag getTag() {
         return tag;
     }

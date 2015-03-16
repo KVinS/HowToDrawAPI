@@ -5,7 +5,6 @@
  */
 package com.websystique.springmvc.dao;
 
-
 import com.websystique.springmvc.model.Tag;
 import com.websystique.springmvc.model.TagSynonym;
 import java.util.List;
@@ -23,26 +22,32 @@ public class TagDAO extends SuperDAO {
 
     @SuppressWarnings("unchecked")
     public List<Tag> getTags(int page, String orderby, String sorter) {
-        String sql = "SELECT * FROM tags ORDER BY " + orderby + " " + sorter ;
+        String sql = "SELECT * FROM tags ORDER BY " + orderby + " " + sorter;
         Query query = getSession().createSQLQuery(sql).addEntity(Tag.class);
-        query.setFirstResult( page);
-                query.setMaxResults(tagsCol);
+        query.setFirstResult(page);
+        query.setMaxResults(tagsCol);
 
         List<Tag> list = query.list();
         return list;
     }
 
+    
     public Tag getTagById(int id) {
         return (Tag) getSession().get(Tag.class, id);
     }
 
     @SuppressWarnings("unchecked")
     public List<TagSynonym> findTagsSynonymByPiece(String piece, int maxTagsInResult) {
-        String sql = "SELECT * FROM tags_synonyms WHERE TITLE LIKE :piece";
+        /*String sql = "SELECT * FROM tags_synonyms WHERE TITLE LIKE :piece";
         Query query = getSession().createSQLQuery(sql).addEntity(TagSynonym.class);
         query.setParameter("piece", "%" + piece + "%");
         query.setMaxResults(maxTagsInResult);
-        List<TagSynonym> list = query.list();
-        return list;
+        List<TagSynonym> tags = query.list();*/
+
+        Query query = getSession().createQuery("from TagSynonym as tagSynonym where tagSynonym.title LIKE :piece");
+        query.setParameter("piece", "%" + piece + "%");
+        query.setMaxResults(maxTagsInResult);
+        List<TagSynonym> tags = (List<TagSynonym>) query.list();
+        return tags;
     }
 }

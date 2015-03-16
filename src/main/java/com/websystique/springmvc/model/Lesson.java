@@ -5,6 +5,7 @@
  */
 package com.websystique.springmvc.model;
 
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -64,14 +65,14 @@ public class Lesson {
         @JoinColumn(name = "LESSON_ID")},
             inverseJoinColumns = {
         @JoinColumn(name = "TAG_ID")})
-    private Set<Tag> tags;
+    private List<Tag> tags;
 
     @Transient
-    public Set<Tag> getTags() {
+    public List<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(Set<Tag> tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 

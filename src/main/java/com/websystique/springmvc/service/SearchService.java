@@ -16,6 +16,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kvins.draw.Parameters;
 import ru.kvins.draw.Utilites;
 
 /**
@@ -31,15 +32,13 @@ public class SearchService {
     @Autowired
     LessonService lessonsService;
     
-    private static int maxTagsInResult = 20;
-    private static int maxLessonsInResult = 20;
-    
+
     public List<TagSynonym> findTagsSynonymByPiece (String piece, String country){
-        return tagsService.getTagsSynonymByPiece(piece, maxTagsInResult);
+        return tagsService.getTagsSynonymByPiece(piece, Parameters.maxTagsInResult);
     }
     
     public List<Lesson> findLessonsByQuery (String query, int page){
-        return lessonsService.getLessonsByQuery(query, maxLessonsInResult, page);
+        return lessonsService.getLessonsByQuery(query, Parameters.maxLessonsInSearchResult, page);
     }
     
 }
