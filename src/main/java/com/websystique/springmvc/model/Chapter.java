@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -35,7 +36,9 @@ public class Chapter {
     @Column(name = "CODE", unique=true, nullable = false)
     private String code;
     
+    
     //Картинка
+    @JsonIgnore
     @Column(name = "IMG", nullable = true)
     private String img;
 

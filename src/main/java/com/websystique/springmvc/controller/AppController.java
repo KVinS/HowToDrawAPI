@@ -35,7 +35,6 @@ import ru.kvins.draw.Utilites.SortType;
 @RequestMapping("/")
 public class AppController {
 
-
     @Autowired
     LessonService lessonsService;
     @Autowired
@@ -45,8 +44,7 @@ public class AppController {
     @Autowired
     SearchService searchService;
 
-
-    @RequestMapping(value = {"/API/lesson/{id}"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/API/lesson/{id}", method = RequestMethod.GET)
     public @ResponseBody
     void getLesson(ModelMap model, @PathVariable Integer id, @RequestParam Integer step, HttpServletResponse response) throws IOException {
 
@@ -93,7 +91,7 @@ public class AppController {
         }
     }
 
-    @RequestMapping(value = {"/API/lessons/{page}"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/API/lessons/{page}", method = RequestMethod.GET)
     public @ResponseBody
     JSONObject getLessons(ModelMap model, @PathVariable Integer page, @RequestParam(value = "sort", required = false, defaultValue = "NEW") SortType sort, @RequestParam(value = "tag", required = false) Integer tag) {
         List<Lesson> lessons;
@@ -110,18 +108,18 @@ public class AppController {
         return obj;
     }
 
-    @RequestMapping(value = {"/API/hints/"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/API/hints/", method = RequestMethod.POST)
     public @ResponseBody
     JSONObject getHints(ModelMap model, @RequestParam String q) {
         List<TagSynonym> hints = searchService.findTagsSynonymByPiece(q, "ru");
-        System.out.println("! "+ q);
+        System.out.println("! " + q);
         JSONObject obj = new JSONObject();
         obj.put("hints", hints);
         obj.put("success", true);
         return obj;
     }
 
-    @RequestMapping(value = {"/API/search/{page}"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/API/search/{page}", method = RequestMethod.POST)
     public @ResponseBody
     JSONObject getHints(ModelMap model, @PathVariable Integer page, @RequestParam String q) {
         List<Lesson> lessons = searchService.findLessonsByQuery(q, page);
@@ -131,7 +129,7 @@ public class AppController {
         return obj;
     }
 
-    @RequestMapping(value = {"/API/chapters/{page}"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/API/chapters/{page}", method = RequestMethod.GET)
     public @ResponseBody
     JSONObject getChapters(ModelMap model, @PathVariable Integer page, @RequestParam(value = "sort", required = false, defaultValue = "NEW") SortType sort) {
         List<Chapter> chapters = chaptersService.getChapters(page, sort);
@@ -141,31 +139,47 @@ public class AppController {
         return obj;
     }
 
-    @RequestMapping(value = {"/API/lesson_prev/{id}"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/API/lesson_prev/{id}", method = RequestMethod.GET)
     public void getLessonPreview(ModelMap model, @PathVariable Integer id, HttpServletResponse response) {
         Lesson l = lessonsService.getLesson(id);
-        try {
-            //InputStream is = new FileInputStream("\\data\\" + l.getChapter() + "\\lesson" + l.getLocalId() + "prew.png");
-            InputStream is = new FileInputStream("D:\\home\\site\\wwwroot\\data\\" + l.getChapter() + "\\res\\drawable\\lesson" + l.getLocalId() + "prew.png");
-            response.setContentType("image/png");
-            org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+        if (l != null) {
+            try {
+                //InputStream is = new FileInputStream("\\data\\" + l.getChapter() + "\\lesson" + l.getLocalId() + "prew.png");
+                InputStream is = new FileInputStream("D:\\home\\site\\wwwroot\\data\\" + l.getChapter() + "\\res\\drawable\\lesson" + l.getLocalId() + "prew.png");
+                response.setContentType("image/png");
+                org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
 
-            response.flushBuffer();
-        } catch (IOException ex) {
-            //log.info("Error writing file to output stream. Filename was '{}'", fileName, ex);
-
-            throw new RuntimeException("IOError reading preview " + id + " to output stream: " + ex.toString());
+                response.flushBuffer();
+            } catch (IOException ex) {
+                //log.info("Error writing file to output stream. Filename was '{}'", fileName, ex);
+                throw new RuntimeException("IOError reading preview " + id + " to output stream: " + ex.toString());
+            }
         }
-        //List<Lesson> lessons = lessonsService.getLessons(page, sort);
-        //return lessons;
     }
 
-    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/API/chapter_prev/{id}", method = RequestMethod.GET)
+    public void getChapterPreview(ModelMap model, @PathVariable Integer id, HttpServletResponse response) {
+        Chapter c = chaptersService.getChapter(id);
+        if (c != null) {
+            String path = "D:\\home\\site\\wwwroot\\data\\" + c.getCode() + "\\ic_launcher-web.png";
+            if ("".equals(c.getImg())) {
+                path = c.getImg();
+            }
+            try {
+                InputStream is = new FileInputStream(path);
+                response.setContentType("image/png");
+                org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+
+                response.flushBuffer();
+            } catch (IOException ex) {
+                //log.info("Error writing file to output stream. Filename was '{}'", fileName, ex);
+                throw new RuntimeException("IOError reading preview " + id + " to output stream: " + ex.toString());
+            }
+        }
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String openGeneral(ModelMap model) {
-        //Employee employee = new Employee();
-        //model.addAttribute("employee", employee);
         return "general";
     }
-
-
 }
