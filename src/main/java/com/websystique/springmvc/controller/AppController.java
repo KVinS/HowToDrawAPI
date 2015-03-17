@@ -94,8 +94,8 @@ public class AppController {
     }
 
     @RequestMapping(value = {"/API/lessons/{page}"}, method = RequestMethod.GET)
-    public @ResponseBody
-    JSONObject getLessons(ModelMap model, @PathVariable Integer page, @RequestParam(value = "sort", required = false, defaultValue = "NEW") SortType sort, @RequestParam(value = "tag", required = false) Integer tag) {
+    @ResponseBody
+    public JSONObject getLessons(ModelMap model, @PathVariable Integer page, @RequestParam(value = "sort", required = false, defaultValue = "NEW") SortType sort, @RequestParam(value = "tag", required = false) Integer tag) {
         List<Lesson> lessons;
         if (tag != null) {
             //lessons= lessonsService.getLessonsByTag(tag, page, sort);

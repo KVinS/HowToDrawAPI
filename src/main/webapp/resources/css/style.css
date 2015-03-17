@@ -165,3 +165,7 @@ body {
     overflow: hidden;
     white-space: nowrap;
 }
+
+input[type=text].search {
+    margin: 0;
+}

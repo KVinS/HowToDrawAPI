@@ -2,10 +2,13 @@
  * Created by Semyon on 05.03.2015.
  */
 
-$(function() {
+/**
+ * called from html after dom finished loading
+ */
+function initLoader() {
     loadPopular = loadPopular();
     loadNew = loadNew();
-});
+}
 
 var loadPopular = function() {
 
@@ -18,7 +21,7 @@ var loadPopular = function() {
 
         var title = data.titleEn;
         var coverUri = "/HowToDraw/API/lesson_prev/"+ data.id;
-        var description = "Как рисовать " + data.titleEn;
+        var description = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ " + data.titleEn;
         var link = data.link;
         var complexity = data.complexity;
 

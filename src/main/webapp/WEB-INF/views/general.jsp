@@ -23,19 +23,26 @@
 
 <nav>
     <div class="nav-wrapper">
-        <a href="#" class="brand-logo right"><input maxlength="50" size="40" value="Поиск"></a>
+        <a href="#" class="brand-logo right"></a>
         <ul id="nav-mobile" class="left hide-on-med-and-down">
             <li><a href="sass.html">Главная</a></li>
             <li><a href="components.html">Темы</a></li>
             <li><a href="javascript.html">Уроки</a></li>
+            <li>
+                <div class="input-field">
+                    <input class="search" id="search" type="text" required="">
+                    <label for="search" class=""><i class="mdi-action-search"></i></label>
+                </div>
+            </li>
         </ul>
     </div>
 </nav>
 
 <script>
     $(function() {
-       loadPopular();
-       loadNew();
+        initLoader();
+        loadPopular();
+        loadNew();
     });
 </script>
 
