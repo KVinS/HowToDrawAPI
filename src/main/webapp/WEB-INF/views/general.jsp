@@ -23,7 +23,7 @@
 
 <nav>
     <div class="nav-wrapper">
-        <a href="#" class="brand-logo right">Рисуем что-нибудь</a>
+        <a href="#" class="brand-logo right"><input maxlength="50" size="40" value="Поиск"></a>
         <ul id="nav-mobile" class="left hide-on-med-and-down">
             <li><a href="sass.html">Главная</a></li>
             <li><a href="components.html">Темы</a></li>
@@ -107,8 +107,6 @@
 </div>
 
 <div class="col s12 m12 l3">
-
-    <h4 class="light">Достижения</h4>
 
     <ul class="collection with-header">
         <li class="collection-header"><h4>Самые активные ученики дня</h4></li>

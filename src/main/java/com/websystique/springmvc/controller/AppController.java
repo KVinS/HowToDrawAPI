@@ -110,17 +110,18 @@ public class AppController {
         return obj;
     }
 
-    @RequestMapping(value = {"/API/hints/"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/API/hints/"}, method = RequestMethod.GET)
     public @ResponseBody
     JSONObject getHints(ModelMap model, @RequestParam String q) {
         List<TagSynonym> hints = searchService.findTagsSynonymByPiece(q, "ru");
+        System.out.println("! "+ q);
         JSONObject obj = new JSONObject();
         obj.put("hints", hints);
         obj.put("success", true);
         return obj;
     }
 
-    @RequestMapping(value = {"/API/search/{page}"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/API/search/{page}"}, method = RequestMethod.GET)
     public @ResponseBody
     JSONObject getHints(ModelMap model, @PathVariable Integer page, @RequestParam String q) {
         List<Lesson> lessons = searchService.findLessonsByQuery(q, page);

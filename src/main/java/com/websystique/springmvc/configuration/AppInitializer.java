@@ -17,6 +17,8 @@ public class AppInitializer implements WebApplicationInitializer {
 		AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
 		ctx.register(AppConfig.class);
 		ctx.setServletContext(container);
+                
+              
                 SimpleCORSFilter filter = new SimpleCORSFilter();
                 
                 container.addFilter("corsFilter", filter).addMappingForUrlPatterns(null, true, "/*");
@@ -33,6 +35,7 @@ public class AppInitializer implements WebApplicationInitializer {
 
 		servlet.setLoadOnStartup(1);
 		servlet.addMapping("/");
+                
 	}
         
 
