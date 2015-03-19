@@ -5,13 +5,14 @@
  */
 package com.websystique.springmvc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -31,18 +32,15 @@ public class Chapter {
     
     @Column(name = "TITLE_EN", nullable = false)
     private String titleEn;
-    
-    //Уникальный код серии уроков + название папки
+
     @Column(name = "CODE", unique=true, nullable = false)
     private String code;
     
-    
-    //Картинка
+
     @JsonIgnore
     @Column(name = "IMG", nullable = true)
     private String img;
 
-    //Просмотров в день
     @Column(name = "VIEWS", nullable = false)
     private int rating;
 
