@@ -1,5 +1,6 @@
 package com.websystique.springmvc.controller;
 
+import com.web.aspect.UTF8;
 import com.websystique.springmvc.model.Chapter;
 import java.util.List;
 
@@ -111,8 +112,9 @@ public class AppController {
     }
 
     @RequestMapping(value = {"/API/hints/"}, method = RequestMethod.GET)
-    public @ResponseBody
-    JSONObject getHints(ModelMap model, @RequestParam String q) {
+    @ResponseBody
+    @UTF8
+    public JSONObject getHints(ModelMap model, @RequestParam String q) {
         List<TagSynonym> hints = searchService.findTagsSynonymByPiece(q, "ru");
         System.out.println("! "+ q);
         JSONObject obj = new JSONObject();
@@ -122,8 +124,9 @@ public class AppController {
     }
 
     @RequestMapping(value = {"/API/search/{page}"}, method = RequestMethod.GET)
-    public @ResponseBody
-    JSONObject getHints(ModelMap model, @PathVariable Integer page, @RequestParam String q) {
+    @ResponseBody
+    @UTF8
+    public JSONObject getHints(ModelMap model, @PathVariable Integer page, @RequestParam String q) {
         List<Lesson> lessons = searchService.findLessonsByQuery(q, page);
         JSONObject obj = new JSONObject();
         obj.put("lessons", lessons);

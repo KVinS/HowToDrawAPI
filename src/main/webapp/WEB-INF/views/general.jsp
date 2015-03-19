@@ -30,8 +30,14 @@
             <li><a href="javascript.html">Уроки</a></li>
             <li>
                 <div class="input-field">
-                    <input class="search" id="search" type="text" required="">
-                    <label for="search" class=""><i class="mdi-action-search"></i></label>
+                    <div class="container">
+                        <div class="helper">
+                            <div class="content">
+                                <input class="search" id="search" type="text" required="">
+                                <label for="search"><i class="mdi-action-search"></i></label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </li>
         </ul>
@@ -43,6 +49,19 @@
         initLoader();
         loadPopular();
         loadNew();
+
+        var $searchBar = $("#search");
+        $searchBar.on("keydown",function(e) {
+            if(e.keyCode == 13) {
+                query($searchBar.val());
+            }
+        });
+
+        var $searchResults = $("#search-results");
+        var $searchResultsContainer = $("#search-results-container");
+        $("#close-search").click(function() {
+            $searchResultsContainer.addClass("hidden");
+        });
     });
 </script>
 
@@ -52,6 +71,18 @@
     <div class="col s12 m12 l9">
 
 
+    <div class="row hidden" id="search-results-container">
+
+        <div class="col s12 m12" style="position: relative">
+            <h4 class="light">Результаты поиска</h4>
+            <i id="close-search" class="close-btn navigation-btn mdi-navigation-close right" style="margin-top: 12px;"></i>
+        </div>
+
+        <div id="search-results">
+
+        </div>
+
+    </div>
 
     <div class="row" id="new">
 
