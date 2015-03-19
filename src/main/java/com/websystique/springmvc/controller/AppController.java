@@ -37,7 +37,6 @@ import ru.kvins.draw.Utilites.SortType;
 @RequestMapping("/")
 public class AppController {
 
-
     @Autowired
     LessonService lessonsService;
     @Autowired
