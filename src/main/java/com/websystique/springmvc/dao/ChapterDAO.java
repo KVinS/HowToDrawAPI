@@ -24,7 +24,7 @@ import ru.kvins.draw.Parameters;
  *
  * @author KVinS
  */
-@Repository("ÒhapterDao")
+@Repository("—ÅhapterDao")
 public class ChapterDAO extends SuperDAO {
 
     

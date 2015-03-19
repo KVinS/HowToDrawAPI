@@ -8,7 +8,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.dialect.SQLServerDialect;
 /**
  *
- * @author ›‰Û‡‰
+ * @author –≠–¥—É–∞—Ä–¥
  */
 public class MSSQLServerDialect  extends SQLServerDialect {
   public MSSQLServerDialect() {

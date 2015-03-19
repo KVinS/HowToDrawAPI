@@ -39,24 +39,24 @@ public class Lesson {
     private String title;
     @Column(name = "TITLE_EN", nullable = false)
     private String titleEn;
-    //Рейтинг
+    //Р РµР№С‚РёРЅРі
     @Column(name = "RATING", nullable = false)
     private int rating;
-    //Просмотров за день
+    //РџСЂРѕСЃРјРѕС‚СЂРѕРІ Р·Р° РґРµРЅСЊ
     @Column(name = "VIEWS", nullable = false)
     private int views;
     @Column(name = "CHAPTER", nullable = false)
     private String chapter;
-    //Рейтинг
+    //Р РµР№С‚РёРЅРі
     @Column(name = "LOCAL_ID", nullable = false)
     private int localId;
-    //Сложность 0-3
+    //РЎР»РѕР¶РЅРѕСЃС‚СЊ 0-3
     @Column(name = "COMPLEXITY", nullable = false)
     private int complexity;
-    //Шагов
+    //РЁР°РіРѕРІ
     @Column(name = "STEPS", nullable = false)
     private int steps;
-    //Формат
+    //Р¤РѕСЂРјР°С‚
     @Column(name = "FORMAT", nullable = false)
     private String format;
     @ManyToMany

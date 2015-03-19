@@ -6,7 +6,7 @@ package ru.kvins.draw;
 
 /**
  *
- * @author İäóàğä
+ * @author Ğ­Ğ´ÑƒĞ°Ñ€Ğ´
  */
 public class Parameters {
     public static int maxTagsInResult = 20;
