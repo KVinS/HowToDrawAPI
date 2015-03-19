@@ -18,6 +18,7 @@
     <script src="${pageContext.request.contextPath}/resources/js/loader.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/errorhandler.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/materialize.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/suggest.js"></script>
 </head>
 <body>
 
@@ -34,6 +35,7 @@
                         <div class="helper">
                             <div class="content">
                                 <input class="search" id="search" type="text" required="">
+                                <div id="suggest"></div>
                                 <label for="search"><i class="mdi-action-search"></i></label>
                             </div>
                         </div>
@@ -54,6 +56,8 @@
         $searchBar.on("keydown",function(e) {
             if(e.keyCode == 13) {
                 query($searchBar.val());
+            } else {
+                suggestion($searchBar.val());
             }
         });
 

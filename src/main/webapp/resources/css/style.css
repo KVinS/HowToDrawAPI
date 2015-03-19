@@ -184,7 +184,6 @@ input[type=text].search {
     display: table;
     height: 100%;
     position: absolute;
-    overflow: hidden;
     width: 100%;
 }
 .helper {
@@ -194,4 +193,21 @@ input[type=text].search {
 .content {
     margin:0 auto;
     width:200px;
+}
+
+#suggest {
+    z-index: 100;
+    position: absolute;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCFF;
+    width: 252px;
+}
+
+#suggest div {
+    padding: 5px;
+    color: black;
+    display: block;
+    width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
 }

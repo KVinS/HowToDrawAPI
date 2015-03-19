@@ -9,6 +9,7 @@ function initLoader() {
     loadPopular = loadPopular();
     loadNew = loadNew();
     query = query();
+    suggestion = suggestion();
 }
 
 var loadPopular = function() {
@@ -57,41 +58,21 @@ var loadPopular = function() {
 
 var suggestion  = function() {
 
-    var $searchResults = $("#search-results");
-    var $searchResultsContainer = $("#search-results-container");
-
-    function createNew(data) {
-        var clone = $("#new-template").clone();
-        clone.removeAttr("id");
-        clone = clone.children(0);
-
-        var title = data.titleEn;
-        var coverUri = "/HowToDraw/API/lesson_prev/"+ data.id;
-        var description = data.titleEn;
-        var link = data.link;
-        var complexity = data.complexity;
-
-        var overflowTitle = clone.find(".lesson-title")[0];
-        overflowTitle.innerHTML = title + overflowTitle.innerHTML;
-        clone.find(".lesson-cover").attr("src", coverUri);
-        clone.find(".lesson-link").attr("href", link);
-        clone.find(".lesson-complexity").addClass("complexity-" + complexity);
-
-        return clone;
-    }
+    var $searchBox = $("#search");
+    var suggest = new Suggest.Local("search", "suggest", []);
 
     return function(query_string) {
-        $.ajax({url: "/HowToDraw/API/search/0?q=" + encodeURI(query_string), contentType: "application/json", dataType: "json"})
+        $.ajax({url: "/HowToDraw/API/hints/?q=" + encodeURI(query_string), contentType: "application/json", dataType: "json"})
             //getMockNew()
             .done(function(data) {
                 if (data.success) {
-                    $searchResults.empty();
-                    $searchResultsContainer.removeClass("hidden");
-                    var lessons = data.lessons;
-                    for (var i = 0; i < lessons.length; i++) {
-                        var _lesson = createNew(lessons[i]);
-                        $searchResults.append(_lesson);
+                    var hints = [];
+                    for (var i = 0; i < data.hints.length; i++) {
+                        var h = data.hints[i];
+                        hints.push(h.title);
                     }
+                    suggest.setCandidateList(hints);
+                    suggest.search();
                 } else {
                     handlerError(data.error);
                 }
