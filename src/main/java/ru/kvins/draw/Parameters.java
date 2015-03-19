@@ -12,5 +12,5 @@ public class Parameters {
     public static int maxTagsInResult = 20;
     public static int maxLessonsInSearchResult = 20;
     public final static int maxLessonsInResult = 6;
-    
+    public final static int maxChaptersInResult = 6;
 }

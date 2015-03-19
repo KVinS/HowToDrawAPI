@@ -18,7 +18,7 @@ public class AppInitializer implements WebApplicationInitializer {
 		ctx.register(AppConfig.class);
 		ctx.setServletContext(container);
                 
-              
+               
                 SimpleCORSFilter filter = new SimpleCORSFilter();
                 
                 container.addFilter("corsFilter", filter).addMappingForUrlPatterns(null, true, "/*");
