@@ -36,7 +36,7 @@ public class LessonDAO extends SuperDAO {
         String sql = "SELECT * FROM lessons ORDER BY " + orderby + " " + sorter;
         Query query = getSession().createSQLQuery(sql).addEntity(Lesson.class);
 
-        query.setFirstResult(page);
+        query.setFirstResult(Parameters.maxLessonsInResult * page);
         query.setMaxResults(Parameters.maxLessonsInResult);
         List<Lesson> list = query.list();
         return list;
@@ -52,7 +52,7 @@ public class LessonDAO extends SuperDAO {
         Query query = getSession().createSQLQuery(sql).addEntity(Lesson.class);
         query.setParameter("squery", "%" + squery + "%");
         query.setMaxResults(maxLessonsInResult);
-        query.setFirstResult(page);
+        query.setFirstResult(maxLessonsInResult*page);
         List<Lesson> list = query.list();
         return list;
     }

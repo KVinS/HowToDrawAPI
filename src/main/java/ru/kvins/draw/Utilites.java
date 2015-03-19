@@ -5,10 +5,33 @@
  */
 package ru.kvins.draw;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  *
  * @author KVinS
  */
 public class Utilites {
-   public enum SortType { NEW , OLD, VIEWS, RATING }
+
+    public enum SortType {
+
+        NEW, OLD, VIEWS, RATING
+    }
+
+    public static void writeImageToResponse(String img, HttpServletResponse response) {
+        try {
+            //InputStream is = new FileInputStream("\\data\\" + l.getChapter() + "\\lesson" + l.getLocalId() + "prew.png");
+            InputStream is = new FileInputStream(img);
+            response.setContentType("image/png");
+            org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+
+            response.flushBuffer();
+        } catch (IOException ex) {
+            //log.info("Error writing file to output stream. Filename was '{}'", fileName, ex);
+            throw new RuntimeException("IOError reading '" + img + "' to output stream: " + ex.toString());
+        }
+    }
 }

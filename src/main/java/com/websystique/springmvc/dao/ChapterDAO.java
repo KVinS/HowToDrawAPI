@@ -18,6 +18,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
+import ru.kvins.draw.Parameters;
 
 /**
  *
@@ -26,7 +27,7 @@ import org.springframework.stereotype.Repository;
 @Repository("ñhapterDao")
 public class ChapterDAO extends SuperDAO {
 
-    private final static int chaptersCol = 6;
+    
 
     @SuppressWarnings("unchecked")
     public List<Chapter> getChapters(int page, String orderby, String sorter) {
@@ -34,8 +35,8 @@ public class ChapterDAO extends SuperDAO {
         Query query = getSession().createSQLQuery(sql).addEntity(Chapter.class);
 
         
-         query.setFirstResult(page);
-         query.setMaxResults(chaptersCol);
+         query.setFirstResult(page*Parameters.maxChaptersInResult);
+         query.setMaxResults(Parameters.maxChaptersInResult);
         List<Chapter> list = query.list();
         return list;
     }
