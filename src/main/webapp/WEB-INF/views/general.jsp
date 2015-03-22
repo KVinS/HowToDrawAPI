@@ -30,7 +30,7 @@
             <li><a href="components.html">Темы</a></li>
             <li><a href="javascript.html">Уроки</a></li>
             <li>
-                <div class="input-field">
+                <div class="input-field" style="height:100%;">
                     <div class="container">
                         <div class="helper">
                             <div class="content">
