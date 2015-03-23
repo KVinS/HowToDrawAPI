@@ -56,7 +56,7 @@ public class AppController {
         Utilites.writeImageToResponse(path, response);
     }
 
-    @RequestMapping(value = "/API/lesson/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/API/lesson_info/{id}", method = RequestMethod.GET)
     public @ResponseBody
     JSONObject getLesson(ModelMap model, @PathVariable Integer id, HttpServletResponse response) throws IOException {
         Lesson l = lessonsService.getLesson(id);
