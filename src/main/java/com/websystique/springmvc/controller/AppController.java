@@ -136,7 +136,15 @@ public class AppController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String openGeneral(ModelMap model) {
+    public String openGeneral(final ModelMap model) {
         return "general";
     }
+
+    @RequestMapping(value = "/lesson", method = RequestMethod.GET)
+    public String openLesson(final ModelMap model, final @RequestParam(required = true) Integer lessonID) {
+        model.put("lessonID", lessonID);
+        return "lesson";
+    }
+
+
 }
