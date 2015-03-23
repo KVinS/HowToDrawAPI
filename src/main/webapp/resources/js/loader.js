@@ -174,3 +174,7 @@ var loadNew = function() {
 
 };
 
+var loadLesson = function() {
+
+};
+

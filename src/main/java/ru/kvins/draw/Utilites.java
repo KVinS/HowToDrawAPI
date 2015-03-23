@@ -8,6 +8,7 @@ package ru.kvins.draw;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -23,8 +24,12 @@ public class Utilites {
 
     public static void writeImageToResponse(String img, HttpServletResponse response) {
         try {
-            //InputStream is = new FileInputStream("\\data\\" + l.getChapter() + "\\lesson" + l.getLocalId() + "prew.png");
-            InputStream is = new FileInputStream(img);
+            InputStream is = null;
+            if (img.contains("http")) {
+                is = new URL(img).openStream();
+            } else {
+                is = new FileInputStream(img);
+            }
             response.setContentType("image/png");
             org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
 

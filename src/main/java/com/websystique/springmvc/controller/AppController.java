@@ -48,8 +48,12 @@ public class AppController {
             step = l.getSteps();
         }
 
+        String baseURI = lessonsService.getBaseURI();
+        String path = baseURI.replace("#{lessonID}", "" + id);
+        path = path.replace("#{chapter}", l.getChapter());
+        path = path.replace("#{localID}", "" + l.getLocalId());
+        path = path.replace("#{stepNum}", "" + step);
 
-        String path = "D:\\home\\site\\wwwroot\\data\\" + l.getChapter() + "\\res\\drawable\\lesson_" + l.getLocalId() + "_step_" + step + ".png";
         Utilites.writeImageToResponse(path, response);
     }
 
@@ -105,7 +109,12 @@ public class AppController {
     public void getLessonPreview(ModelMap model, @PathVariable Integer id, HttpServletResponse response) {
         Lesson l = lessonsService.getLesson(id);
         if (l != null) {
-            String path = "D:\\home\\site\\wwwroot\\data\\" + l.getChapter() + "\\res\\drawable\\lesson" + l.getLocalId() + "prew.png";
+
+            String baseURI = lessonsService.getLessonPreviewURI();
+            String path = baseURI.replace("#{lessonID}", "" + id);
+            path = path.replace("#{chapter}", l.getChapter());
+            path = path.replace("#{localID}", "" + l.getLocalId());
+
             Utilites.writeImageToResponse(path, response);
         }
     }
@@ -114,7 +123,11 @@ public class AppController {
     public void getChapterPreview(ModelMap model, @PathVariable Integer id, HttpServletResponse response) {
         Chapter c = chaptersService.getChapter(id);
         if (c != null) {
-            String path = "D:\\home\\site\\wwwroot\\data\\" + c.getCode() + "\\ic_launcher-web.png";
+
+            String baseURI = lessonsService.getLessonPreviewURI();
+            String path = baseURI.replace("#{lessonID}", "" + id);
+            path = path.replace("#{chapter}", c.getCode());
+
             if (!"".equals(c.getImg())) {
                 path = c.getImg();
             }

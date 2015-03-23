@@ -15,10 +15,13 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kvins.draw.Utilites;
 import ru.kvins.draw.Utilites.SortType;
+
+import javax.annotation.PostConstruct;
 
 /**
  *
@@ -30,6 +33,32 @@ public class LessonService {
 
     @Autowired
     private LessonDAO lessonDAO;
+
+    @Autowired
+    private Environment environment;
+
+    private String baseURI = null;
+    private String lessonPreviewURI = null;
+    private String chapterPreviewURI= null;
+
+    public String getBaseURI() {
+        return baseURI;
+    }
+
+    public String getLessonPreviewURI() {
+        return lessonPreviewURI;
+    }
+
+    public String getChapterPreviewURI() {
+        return chapterPreviewURI;
+    }
+
+    @PostConstruct
+    private void init() {
+        baseURI = environment.getProperty("lessons.baseURI");
+        lessonPreviewURI = environment.getProperty("lessons.previewURI");
+        chapterPreviewURI = environment.getProperty("chapters.previewURI");
+    }
 
     public void persistLesson(Lesson lesson) {
         lessonDAO.<Lesson>persist(lesson);

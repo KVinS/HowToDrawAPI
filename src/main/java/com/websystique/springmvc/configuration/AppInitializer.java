@@ -19,14 +19,14 @@ public class AppInitializer implements WebApplicationInitializer {
 		ctx.setServletContext(container);
                 
                
-                SimpleCORSFilter filter = new SimpleCORSFilter();
-                
-                container.addFilter("corsFilter", filter).addMappingForUrlPatterns(null, true, "/*");
-                
-                CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
-                encodingFilter.setEncoding("UTF-8");
-                encodingFilter.setForceEncoding(true);
-                container.addFilter("encodingFilter", encodingFilter).addMappingForUrlPatterns(null, true, "/*");
+        SimpleCORSFilter filter = new SimpleCORSFilter();
+
+        container.addFilter("corsFilter", filter).addMappingForUrlPatterns(null, true, "/*");
+
+        CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+        encodingFilter.setEncoding("UTF-8");
+        encodingFilter.setForceEncoding(true);
+        container.addFilter("encodingFilter", encodingFilter).addMappingForUrlPatterns(null, true, "/*");
                 
 
                 
