@@ -160,15 +160,18 @@ function SuperPaint() {
         var paint;
 
         this.mousedown = function(e) {
-            var mouseX = e.pageX - this.offsetLeft;
-            var mouseY = e.pageY - this.offsetTop;
-
+            var offset = $layer.offset();
+            this.offsetLeft = offset.left;
+            this.offsetTop = offset.top;
             paint = true;
             addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
             redraw();
         };
 
         this.mousemove = function(e) {
+            var offset = $layer.offset();
+            this.offsetLeft = offset.left;
+            this.offsetTop = offset.top;
             if(paint){
                 addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
                 redraw();

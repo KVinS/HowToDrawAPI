@@ -107,13 +107,24 @@ var query  = function() {
         return clone;
     }
 
-    return function(query_string) {
-        $.ajax({url: "/HowToDraw/API/search/0?q=" + encodeURI(query_string), contentType: "application/json", dataType: "json"})
+    var pendingRequest = null;
+
+    return function(query_string, preloader) {
+        if (pendingRequest != null) {
+            try {
+                pendingRequest.abort();
+            } catch (e) {
+
+            }
+        }
+        preloader.show();
+        $searchResultsContainer.removeClass("hidden");
+        pendingRequest = $.ajax({url: "/HowToDraw/API/search/0?q=" + encodeURI(query_string), contentType: "application/json", dataType: "json"})
             //getMockNew()
             .done(function(data) {
+                preloader.hide();
                 if (data.success) {
                     $searchResults.empty();
-                    $searchResultsContainer.removeClass("hidden");
                     var lessons = data.lessons;
                     for (var i = 0; i < lessons.length; i++) {
                         var _lesson = createNew(lessons[i]);
@@ -123,6 +134,7 @@ var query  = function() {
                     handlerError(data.error);
                 }
             }, function(error) {
+                preloader.hide();
                 handlerError(error);
             });
     }
