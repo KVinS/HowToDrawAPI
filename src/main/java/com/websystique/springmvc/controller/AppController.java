@@ -3,7 +3,6 @@ package com.websystique.springmvc.controller;
 import com.websystique.springmvc.model.Chapter;
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -57,6 +56,16 @@ public class AppController {
         Utilites.writeImageToResponse(path, response);
     }
 
+    @RequestMapping(value = "/API/lesson/{id}", method = RequestMethod.GET)
+    public @ResponseBody
+    JSONObject getLesson(ModelMap model, @PathVariable Integer id, HttpServletResponse response) throws IOException {
+        Lesson l = lessonsService.getLesson(id);
+        JSONObject obj = new JSONObject();
+        obj.put("lesson", l);
+        obj.put("success", true);
+        return obj;
+    }
+
     @RequestMapping(value = "/API/lessons/{page}", method = RequestMethod.GET)
     public @ResponseBody
     JSONObject getLessons(ModelMap model, @PathVariable Integer page, @RequestParam(value = "sort", required = false, defaultValue = "NEW") SortType sort, @RequestParam(value = "tag", required = false) Integer tag) {
@@ -70,6 +79,7 @@ public class AppController {
         }
         JSONObject obj = new JSONObject();
         obj.put("lessons", lessons);
+        //obj.put("pages", );
         obj.put("success", true);
         return obj;
     }
@@ -145,6 +155,5 @@ public class AppController {
         model.put("lessonID", lessonID);
         return "lesson";
     }
-
 
 }
