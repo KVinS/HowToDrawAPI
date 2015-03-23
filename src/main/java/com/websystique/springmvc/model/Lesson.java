@@ -5,6 +5,7 @@
  */
 package com.websystique.springmvc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -62,12 +63,12 @@ public class Lesson {
     @ManyToMany
     @JoinTable(name = "TAGS_AND_LESSONS_BOUNDS",
             joinColumns = {
-        @JoinColumn(name = "LESSON_ID")},
+                @JoinColumn(name = "LESSON_ID")},
             inverseJoinColumns = {
-        @JoinColumn(name = "TAG_ID")})
+                @JoinColumn(name = "TAG_ID")})
     private List<Tag> tags;
 
-    @Transient
+    @JsonIgnore
     public List<Tag> getTags() {
         return tags;
     }

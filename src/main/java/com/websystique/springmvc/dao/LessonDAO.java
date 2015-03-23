@@ -5,20 +5,10 @@
  */
 package com.websystique.springmvc.dao;
 
-import java.util.List;
-import org.springframework.stereotype.Repository;
 
 import com.websystique.springmvc.model.Lesson;
-import com.websystique.springmvc.model.TagSynonym;
-import com.websystique.springmvc.model.User;
 import java.util.List;
-import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Expression;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import ru.kvins.draw.Parameters;
 

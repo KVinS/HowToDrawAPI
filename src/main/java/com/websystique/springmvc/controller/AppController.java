@@ -62,6 +62,7 @@ public class AppController {
         Lesson l = lessonsService.getLesson(id);
         JSONObject obj = new JSONObject();
         obj.put("lesson", l);
+        obj.put("tags", l.getTags());
         obj.put("success", true);
         return obj;
     }
@@ -88,7 +89,6 @@ public class AppController {
     @ResponseBody
     public JSONObject getHints(ModelMap model, @RequestParam String q) {
         List<TagSynonym> hints = searchService.findTagsSynonymByPiece(q, "ru");
-        System.out.println("! " + q);
         JSONObject obj = new JSONObject();
         obj.put("hints", hints);
         obj.put("success", true);
@@ -100,6 +100,7 @@ public class AppController {
     public JSONObject search(ModelMap model, @PathVariable Integer page, @RequestParam String q) {
         List<Lesson> lessons = searchService.findLessonsByQuery(q, page);
         JSONObject obj = new JSONObject();
+        //System.out.println("УРОКИ ДОСТАНЫ!");
         obj.put("lessons", lessons);
         obj.put("success", true);
         return obj;
