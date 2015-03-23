@@ -29,19 +29,6 @@
             <li><a href="sass.html">Главная</a></li>
             <li><a href="components.html">Темы</a></li>
             <li><a href="javascript.html">Уроки</a></li>
-            <li>
-                <div class="input-field" style="height:100%;">
-                    <div class="container">
-                        <div class="helper">
-                            <div class="content">
-                                <input class="search" id="search" type="text" required="">
-                                <div id="suggest"></div>
-                                <label for="search"><i class="mdi-action-search"></i></label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
         </ul>
     </div>
 </nav>
@@ -69,6 +56,28 @@
     });
 </script>
 
+<style>
+    .outer {
+        height: 1000px;
+        width: 100%;
+        border: 1px solid red;
+        overflow: hidden;
+        *position: relative;
+    }
+    .inner {
+        float: left;
+        position: relative;
+        left: 50%;
+        height: 100%;
+    }
+    #lessonImage {
+        display: block;
+        position: relative;
+        left: -50%;
+        height: 100%;
+    }
+</style>
+
 <div class="row">
 
 
@@ -82,7 +91,12 @@
         </div>
         <div class="row">
             <div class="col s12 m12 l12">
-                <img id="lessonImage" src="" style="height: 500px; max-width: 100%; margin: 0 auto;">
+                <div class="outer">
+                    <div class="inner">
+                        <img id="lessonImage" src="">
+                    </div>
+                </div>
+
             </div>
         </div>
 

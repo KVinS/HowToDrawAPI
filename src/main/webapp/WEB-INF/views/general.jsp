@@ -123,7 +123,7 @@
 
     <div id="new-template" class="template">
         <div class="col s6 m4 l4">
-            <div class="card-panel lighten-5 z-depth-1 waves-effect waves-grey">
+            <a class="card-panel lighten-5 z-depth-1 waves-effect waves-grey lesson-link" lesson-link>
                 <div class="row valign-wrapper">
                     <div class="col s3 l4 img-holder">
                         <img src="" alt="" class="circle responsive-img lesson-cover" lesson-cover> <!-- notice the "circle" class -->
@@ -142,7 +142,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 

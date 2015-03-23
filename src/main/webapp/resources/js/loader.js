@@ -96,13 +96,12 @@ var query  = function() {
         var title = data.titleEn;
         var coverUri = "/HowToDraw/API/lesson_prev/"+ data.id;
         var description = data.titleEn;
-        var link = data.link;
         var complexity = data.complexity;
 
         var overflowTitle = clone.find(".lesson-title")[0];
         overflowTitle.innerHTML = title + overflowTitle.innerHTML;
         clone.find(".lesson-cover").attr("src", coverUri);
-        clone.find(".lesson-link").attr("href", link);
+        clone.find(".lesson-link").attr("href", "/HowToDraw/lesson?lessonID=" + data.id);
         clone.find(".lesson-complexity").addClass("complexity-" + complexity);
 
         return clone;
@@ -142,13 +141,12 @@ var loadNew = function() {
         var title = data.titleEn;
         var coverUri = "/HowToDraw/API/lesson_prev/"+ data.id;
         var description = data.titleEn;
-        var link = data.link;
         var complexity = data.complexity;
 
         var overflowTitle = clone.find(".lesson-title")[0];
         overflowTitle.innerHTML = title + overflowTitle.innerHTML;
         clone.find(".lesson-cover").attr("src", coverUri);
-        clone.find(".lesson-link").attr("href", link);
+        clone.find(".lesson-link").attr("href", "/HowToDraw/lesson?lessonID=" + data.id);
         clone.find(".lesson-complexity").addClass("complexity-" + complexity);
 
         return clone;
