@@ -23,6 +23,7 @@
 }
 
 .card-panel {
+    height: 125px;
     padding: 14px;
 }
 
@@ -204,7 +205,8 @@ input[type=text].search {
 }
 
 #suggest div {
-    padding: 5px;
+    padding: 10px;
+    line-height: 1.5;
     color: black;
     display: block;
     width: 200px;

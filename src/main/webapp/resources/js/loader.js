@@ -96,25 +96,34 @@ var query  = function() {
         var title = data.titleEn;
         var coverUri = "/HowToDraw/API/lesson_prev/"+ data.id;
         var description = data.titleEn;
-        var link = data.link;
         var complexity = data.complexity;
 
         var overflowTitle = clone.find(".lesson-title")[0];
         overflowTitle.innerHTML = title + overflowTitle.innerHTML;
         clone.find(".lesson-cover").attr("src", coverUri);
-        clone.find(".lesson-link").attr("href", link);
+        clone.find(".lesson-link").attr("href", "/HowToDraw/lesson?lessonID=" + data.id);
         clone.find(".lesson-complexity").addClass("complexity-" + complexity);
 
         return clone;
     }
 
-    return function(query_string) {
-        $.ajax({url: "/HowToDraw/API/search/0?q=" + encodeURI(query_string), contentType: "application/json", dataType: "json"})
+    var pendingRequest = null;
+
+    return function(query_string, preloader) {
+        if (pendingRequest != null) {
+            try {
+                pendingRequest.abort();
+            } catch (e) {
+
+            }
+        }
+        preloader.show();
+        $searchResultsContainer.removeClass("hidden");
+        pendingRequest = $.ajax({url: "/HowToDraw/API/search/0?q=" + encodeURI(query_string), contentType: "application/json", dataType: "json"})
             //getMockNew()
             .done(function(data) {
                 if (data.success) {
                     $searchResults.empty();
-                    $searchResultsContainer.removeClass("hidden");
                     var lessons = data.lessons;
                     for (var i = 0; i < lessons.length; i++) {
                         var _lesson = createNew(lessons[i]);
@@ -125,6 +134,8 @@ var query  = function() {
                 }
             }, function(error) {
                 handlerError(error);
+            }).always(function() {
+                preloader.hide();
             });
     }
 
@@ -142,13 +153,12 @@ var loadNew = function() {
         var title = data.titleEn;
         var coverUri = "/HowToDraw/API/lesson_prev/"+ data.id;
         var description = data.titleEn;
-        var link = data.link;
         var complexity = data.complexity;
 
         var overflowTitle = clone.find(".lesson-title")[0];
         overflowTitle.innerHTML = title + overflowTitle.innerHTML;
         clone.find(".lesson-cover").attr("src", coverUri);
-        clone.find(".lesson-link").attr("href", link);
+        clone.find(".lesson-link").attr("href", "/HowToDraw/lesson?lessonID=" + data.id);
         clone.find(".lesson-complexity").addClass("complexity-" + complexity);
 
         return clone;
@@ -175,7 +185,7 @@ var loadNew = function() {
 };
 
 var loadLesson = function(img, lessonId, step) {
-
+    $(img).unbind("load");
     $(img).attr('src', '/HowToDraw/API/lesson/' + lessonId + '?step=' + step)
         .load(function() {
             if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {

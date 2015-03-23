@@ -55,7 +55,7 @@
         var $searchBar = $("#search");
         $searchBar.on("keydown",function(e) {
             if(e.keyCode == 13) {
-                query($searchBar.val());
+                query($searchBar.val(), $("#preloader"));
             } else {
                 suggestion($searchBar.val());
             }
@@ -80,6 +80,53 @@
         <div class="col s12 m12" style="position: relative">
             <h4 class="light">Результаты поиска</h4>
             <i id="close-search" class="close-btn navigation-btn mdi-navigation-close right" style="margin-top: 12px;"></i>
+        </div>
+
+
+        <div class="col s12 m4 l12 center" id="preloader">
+
+            <div class="preloader-wrapper small active">
+                <div class="spinner-layer spinner-blue">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+
+                <div class="spinner-layer spinner-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+
+                <div class="spinner-layer spinner-yellow">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+
+                <div class="spinner-layer spinner-green">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+            </div>
+
         </div>
 
         <div id="search-results">
@@ -123,7 +170,7 @@
 
     <div id="new-template" class="template">
         <div class="col s6 m4 l4">
-            <div class="card-panel lighten-5 z-depth-1 waves-effect waves-grey">
+            <a class="card-panel lighten-5 z-depth-1 waves-effect waves-grey lesson-link" lesson-link>
                 <div class="row valign-wrapper">
                     <div class="col s3 l4 img-holder">
                         <img src="" alt="" class="circle responsive-img lesson-cover" lesson-cover> <!-- notice the "circle" class -->
@@ -142,7 +189,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 
