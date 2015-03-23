@@ -5145,27 +5145,27 @@ nav .input-field label.active {
 
 @font-face {
     font-family: "Roboto";
-    src: url(http://fonts.googleapis.com/css?family=Roboto:200&subset=latin,cyrillic);
+    src: url(fonts.googleapis.com/css?family=Roboto:200&subset=latin,cyrillic);
     font-weight: 200; }
 
 @font-face {
     font-family: "Roboto";
-    src: url(http://fonts.googleapis.com/css?family=Roboto:300&subset=latin,cyrillic);
+    src: url(fonts.googleapis.com/css?family=Roboto:300&subset=latin,cyrillic);
     font-weight: 300; }
 
 @font-face {
     font-family: "Roboto";
-    src: url(http://fonts.googleapis.com/css?family=Roboto:400&subset=latin,cyrillic);
+    src: url(fonts.googleapis.com/css?family=Roboto:400&subset=latin,cyrillic);
     font-weight: 400; }
 
 @font-face {
     font-family: "Roboto";
-    src: url(http://fonts.googleapis.com/css?family=Roboto:500&subset=latin,cyrillic);
+    src: url(fonts.googleapis.com/css?family=Roboto:500&subset=latin,cyrillic);
     font-weight: 500; }
 
 @font-face {
     font-family: "Roboto";
-    src: url(http://fonts.googleapis.com/css?family=Roboto:700&subset=latin,cyrillic);
+    src: url(fonts.googleapis.com/css?family=Roboto:700&subset=latin,cyrillic);
     font-weight: 700; }
 
 
