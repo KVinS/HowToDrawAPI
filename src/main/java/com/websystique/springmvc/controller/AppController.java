@@ -52,6 +52,7 @@ public class AppController {
         path = path.replace("#{chapter}", l.getChapter());
         path = path.replace("#{localID}", "" + l.getLocalId());
         path = path.replace("#{stepNum}", "" + step);
+        path = path.replace("#{format}", "" + l.getFormat());
 
         Utilites.writeImageToResponse(path, response);
     }

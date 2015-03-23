@@ -16,7 +16,7 @@
         <joda-time.version>2.3</joda-time.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <lesson.baseURI>D:\home\site\wwwroot\data\#{chapter}\\res\\drawable\\lesson_#{localID}_step_#{stepNum}.png</lesson.baseURI>
+        <lesson.baseURI>D:\home\site\wwwroot\data\#{chapter}\\res\\drawable\\lesson_#{localID}_step_#{stepNum}.#{format}</lesson.baseURI>
         <lesson.preview>D:\home\site\wwwroot\data\#{chapter}\\res\\drawable\\lesson#{localID}prew.png</lesson.preview>
         <chapter.preview>D:\home\site\wwwroot\data\#{chapter}\ic_launcher-web.png</chapter.preview>
     </properties>
