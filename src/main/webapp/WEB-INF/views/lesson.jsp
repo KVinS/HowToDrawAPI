@@ -18,7 +18,7 @@
     <script src="${pageContext.request.contextPath}/resources/js/loader.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/errorhandler.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/materialize.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/suggest.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/supapaint.js"></script>
 </head>
 <body>
 
@@ -51,7 +51,19 @@
             loadLesson($img, lessonId, ++curStep);
         });
 
+        $.fn.material_select();
+
         loadLesson($img, lessonId, curStep);
+
+        var paint = new SuperPaint();
+        paint.init($("#paint"), $("#layers_select"));
+
+        $("#create_layer").click(function() {
+           paint.addLayer($("#layer_name").val());
+        });
+        $("#remove_layer").click(function() {
+            paint.removeLayer($("#layer_name").val());
+        });
 
     });
 </script>
@@ -62,7 +74,7 @@
         width: 100%;
         border: 1px solid red;
         overflow: hidden;
-        *position: relative;
+        position: relative;
     }
     .inner {
         float: left;
@@ -76,6 +88,19 @@
         left: -50%;
         height: 100%;
     }
+
+    #paint {
+        position: relative;
+        height: 100%;
+        width: 100%;
+    }
+
+    #paint canvas {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
 </style>
 
 <div class="row">
@@ -87,6 +112,10 @@
             <div class="col s12 m12 l12">
                 <div class="waves-effect waves-light btn" id="back">Back</div>
                 <div class="waves-effect waves-light btn" id="forward">Forward</div>
+                <input id="layer_name" type="text"/>
+                <div class="waves-effect waves-light btn" id="create_layer">Create layer</div>
+                <div class="waves-effect waves-light btn" id="remove_layer">Remove layer</div>
+                <select id="layers_select"></select>
             </div>
         </div>
         <div class="row">
@@ -94,6 +123,8 @@
                 <div class="outer">
                     <div class="inner">
                         <img id="lessonImage" src="">
+                    </div>
+                    <div id="paint">
                     </div>
                 </div>
 

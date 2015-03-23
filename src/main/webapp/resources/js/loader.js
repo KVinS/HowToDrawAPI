@@ -173,7 +173,7 @@ var loadNew = function() {
 };
 
 var loadLesson = function(img, lessonId, step) {
-
+    $(img).unbind("load");
     $(img).attr('src', '/HowToDraw/API/lesson/' + lessonId + '?step=' + step)
         .load(function() {
             if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
