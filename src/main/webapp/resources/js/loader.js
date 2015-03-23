@@ -122,7 +122,6 @@ var query  = function() {
         pendingRequest = $.ajax({url: "/HowToDraw/API/search/0?q=" + encodeURI(query_string), contentType: "application/json", dataType: "json"})
             //getMockNew()
             .done(function(data) {
-                preloader.hide();
                 if (data.success) {
                     $searchResults.empty();
                     var lessons = data.lessons;
@@ -134,8 +133,9 @@ var query  = function() {
                     handlerError(data.error);
                 }
             }, function(error) {
-                preloader.hide();
                 handlerError(error);
+            }).always(function() {
+                preloader.hide();
             });
     }
 
