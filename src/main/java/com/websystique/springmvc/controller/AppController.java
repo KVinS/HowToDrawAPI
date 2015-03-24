@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import ru.kvins.draw.SearchPair;
 import ru.kvins.draw.Utilites;
 import ru.kvins.draw.Utilites.SortType;
 
@@ -72,15 +73,22 @@ public class AppController {
     public @ResponseBody
     JSONObject getLessons(ModelMap model, @PathVariable Integer page, @RequestParam(value = "sort", required = false, defaultValue = "NEW") SortType sort, @RequestParam(value = "tag", required = false) Integer tag) {
         List<Lesson> lessons;
+        SearchPair<Lesson> result;
+        int total;
         if (tag != null) {
             //lessons= lessonsService.getLessonsByTag(tag, page, sort);
             Tag st = tagsService.getTag(tag);
-            lessons = st.getLessons(page);
+            result = searchService.findLessonsByTag(st, page);
+            lessons = result.getList();
+            total = result.getTotal();
         } else {
-            lessons = lessonsService.getLessons(page, sort);
+            result = lessonsService.getLessons(page, sort);
+            lessons = result.getList();
+            total = result.getTotal();
         }
         JSONObject obj = new JSONObject();
         obj.put("lessons", lessons);
+        obj.put("total", total);
         //obj.put("pages", );
         obj.put("success", true);
         return obj;
@@ -99,10 +107,13 @@ public class AppController {
     @RequestMapping(value = "/API/search/{page}", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject search(ModelMap model, @PathVariable Integer page, @RequestParam String q) {
-        List<Lesson> lessons = searchService.findLessonsByQuery(q, page);
+        SearchPair<Lesson> result = searchService.findLessonsByQuery(q, page);
+        List<Lesson> lessons = result.getList();
+        int total  = result.getTotal();
         JSONObject obj = new JSONObject();
         //System.out.println("УРОКИ ДОСТАНЫ!");
         obj.put("lessons", lessons);
+        obj.put("total", total);
         obj.put("success", true);
         return obj;
     }
@@ -110,9 +121,12 @@ public class AppController {
     @RequestMapping(value = "/API/chapters/{page}", method = RequestMethod.GET)
     public @ResponseBody
     JSONObject getChapters(ModelMap model, @PathVariable Integer page, @RequestParam(value = "sort", required = false, defaultValue = "NEW") SortType sort) {
-        List<Chapter> chapters = chaptersService.getChapters(page, sort);
+        SearchPair<Chapter> result = chaptersService.getChapters(page, sort);
+        List<Chapter> chapters = result.getList();
+        int total  = result.getTotal();
         JSONObject obj = new JSONObject();
         obj.put("chapters", chapters);
+        obj.put("total", total);
         obj.put("success", true);
         return obj;
     }

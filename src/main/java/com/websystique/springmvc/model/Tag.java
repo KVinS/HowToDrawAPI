@@ -7,24 +7,17 @@ package com.websystique.springmvc.model;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.kvins.draw.Parameters;
+import ru.kvins.draw.SearchPair;
 
 /**
  *
@@ -46,7 +39,7 @@ public class Tag {
     private List<Lesson> lessons;
 
     @JsonIgnore
-    public List<Lesson> getLessons(int page) {
+    public SearchPair<Lesson> getLessons(int page) {
         int start = Parameters.maxLessonsInResult * page;
         int finish = start + Parameters.maxLessonsInResult;
 
@@ -63,7 +56,7 @@ public class Tag {
         for (int i = start; i < finish; i++) {
             l.add(lessons.get(i));
         }
-        return l;
+        return new <Lesson>SearchPair(l,lessons.size()/Parameters.maxLessonsInResult);
     }
 
     public void setLessons(List<Lesson> lessons) {

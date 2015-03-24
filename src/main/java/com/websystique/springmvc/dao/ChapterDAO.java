@@ -5,20 +5,13 @@
  */
 package com.websystique.springmvc.dao;
 
-import java.util.List;
-import org.springframework.stereotype.Repository;
-
 import com.websystique.springmvc.model.Chapter;
-import com.websystique.springmvc.model.User;
+import com.websystique.springmvc.model.Lesson;
 import java.util.List;
-import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import ru.kvins.draw.Parameters;
+import ru.kvins.draw.SearchPair;
 
 /**
  *
@@ -27,18 +20,20 @@ import ru.kvins.draw.Parameters;
 @Repository("сhapterDao")
 public class ChapterDAO extends SuperDAO {
 
-    
-
     @SuppressWarnings("unchecked")
-    public List<Chapter> getChapters(int page, String orderby, String sorter) {
-        String sql = "SELECT * FROM chapters ORDER BY "+orderby+" "+sorter;
+    public SearchPair<Chapter> getChapters(int page, String orderby, String sorter) {
+        String sql = "SELECT * FROM chapters ORDER BY " + orderby + " " + sorter;
         Query query = getSession().createSQLQuery(sql).addEntity(Chapter.class);
 
-        
-         query.setFirstResult(page*Parameters.maxChaptersInResult);
-         query.setMaxResults(Parameters.maxChaptersInResult);
+        query.setFirstResult(page * Parameters.maxChaptersInResult);
+        query.setMaxResults(Parameters.maxChaptersInResult);
         List<Chapter> list = query.list();
-        return list;
+
+        sql = "SELECT COUNT(id) FROM chapters";
+        query = getSession().createSQLQuery(sql);
+        int total = (int) Math.ceil((Integer) query.uniqueResult() / Parameters.maxChaptersInResult);
+
+        return new <Chapter>SearchPair(list, total);
     }
 
     public Chapter getChapterById(int id) {

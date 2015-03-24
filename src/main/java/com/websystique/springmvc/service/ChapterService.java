@@ -6,13 +6,12 @@
 package com.websystique.springmvc.service;
 
 import com.websystique.springmvc.dao.ChapterDAO;
-import com.websystique.springmvc.dao.SuperDAO;
 import com.websystique.springmvc.model.Chapter;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kvins.draw.SearchPair;
 import ru.kvins.draw.Utilites.SortType;
 
 /**
@@ -37,7 +36,7 @@ public class ChapterService {
         chapterDAO.merge(chapter);
     }
 
-    public List<Chapter> getChapters(int page, SortType sort) {
+    public SearchPair<Chapter> getChapters(int page, SortType sort) {
         if (SortType.NEW==sort) {
             return chapterDAO.getChapters(page, "ID", "DESC");
         } else if (SortType.OLD==sort) {

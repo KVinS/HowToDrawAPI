@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kvins.draw.Parameters;
+import ru.kvins.draw.SearchPair;
 import ru.kvins.draw.Utilites;
 
 /**
@@ -37,8 +38,12 @@ public class SearchService {
         return tagsService.getTagsSynonymByPiece(piece, Parameters.maxTagsInResult);
     }
     
-    public List<Lesson> findLessonsByQuery (String query, int page){
+    public  SearchPair<Lesson> findLessonsByQuery (String query, int page){
         return lessonsService.getLessonsByQuery(query, Parameters.maxLessonsInSearchResult, page);
+    }
+    
+    public SearchPair<Lesson> findLessonsByTag (Tag tag, int page){
+        return tag.getLessons(page);
     }
     
 }

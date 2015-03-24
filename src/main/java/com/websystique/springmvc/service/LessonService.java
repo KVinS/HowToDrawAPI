@@ -6,9 +6,7 @@
 package com.websystique.springmvc.service;
 
 import com.websystique.springmvc.dao.LessonDAO;
-import com.websystique.springmvc.dao.SuperDAO;
 import com.websystique.springmvc.model.Lesson;
-import com.websystique.springmvc.model.TagSynonym;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -18,10 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kvins.draw.Utilites;
 import ru.kvins.draw.Utilites.SortType;
 
 import javax.annotation.PostConstruct;
+import ru.kvins.draw.SearchPair;
 
 /**
  *
@@ -71,7 +69,7 @@ public class LessonService {
         lessonDAO.merge(lesson);
     }
 
-    public List<Lesson> getLessons(int page, SortType sort) {
+    public SearchPair<Lesson> getLessons(int page, SortType sort) {
         if (SortType.NEW == sort) {
             return lessonDAO.getLessons(page, "ID", "DESC");
         } else if (SortType.OLD == sort) {
@@ -94,7 +92,7 @@ public class LessonService {
         return lessons;
     }
 
-    public List<Lesson> getLessonsByQuery (String query, int maxLessonsInResult, int page){
+    public  SearchPair<Lesson> getLessonsByQuery (String query, int maxLessonsInResult, int page){
         return lessonDAO.getLessonsByQuery(query, maxLessonsInResult, page);
     }
 
