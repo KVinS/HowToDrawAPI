@@ -50,13 +50,11 @@ public class LessonDAO extends SuperDAO {
         List<Lesson> list = query.list();
 
         int total = 0;
-        sql = "SELECT DISTINCT COUNT(TAG_ID) FROM tags_synonyms WHERE TITLE LIKE :squery";
+        sql = "SELECT COUNT(DISTINCT TAG_ID) FROM tags_synonyms WHERE TITLE LIKE :squery";
         query = getSession().createSQLQuery(sql);
         query.setParameter("squery", "%" + squery + "%");
-        query = getSession().createSQLQuery(sql);
         total = (int) Math.ceil(((Integer) query.uniqueResult()) / Parameters.maxLessonsInResult);
 
-        System.out.println("TOTAL :" + total);
         return new <Lesson>SearchPair(list, total);
     }
 }

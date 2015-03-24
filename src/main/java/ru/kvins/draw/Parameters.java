@@ -10,7 +10,7 @@ package ru.kvins.draw;
  */
 public class Parameters {
     public static int maxTagsInResult = 20;
-    public static int maxLessonsInSearchResult = 6;
+    public static int maxLessonsInSearchResult = 18;
     public final static int maxLessonsInResult = 6;
     public final static int maxChaptersInResult = 6;
 }
