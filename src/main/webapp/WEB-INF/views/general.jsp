@@ -55,7 +55,7 @@
         var $searchBar = $("#search");
         $searchBar.on("keydown",function(e) {
             if(e.keyCode == 13) {
-                query($searchBar.val(), $("#preloader"));
+                query($searchBar.val(), 0);
             } else {
                 suggestion($searchBar.val());
             }
@@ -79,7 +79,9 @@
 
         <div class="col s12 m12" style="position: relative">
             <h4 class="light">Результаты поиска</h4>
+            <h6 class="light" id="page-number"></h6>
             <i id="close-search" class="close-btn navigation-btn mdi-navigation-close right" style="margin-top: 12px;"></i>
+
         </div>
 
 
@@ -130,6 +132,10 @@
         </div>
 
         <div id="search-results">
+
+        </div>
+
+        <div class="row" id="search-pagination">
 
         </div>
 

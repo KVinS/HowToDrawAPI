@@ -40,8 +40,8 @@ public class AppController {
     SearchService searchService;
 
     @RequestMapping(value = "/API/lesson/{id}", method = RequestMethod.GET)
-    public @ResponseBody
-    void getLesson(ModelMap model, @PathVariable Integer id, @RequestParam Integer step, HttpServletResponse response) throws IOException {
+    @ResponseBody
+    public void getLesson(ModelMap model, @PathVariable Integer id, @RequestParam Integer step, HttpServletResponse response) throws IOException {
         Lesson l = lessonsService.getLesson(id);
 
         if (step > l.getSteps()) {
@@ -59,8 +59,8 @@ public class AppController {
     }
 
     @RequestMapping(value = "/API/lesson_info/{id}", method = RequestMethod.GET)
-    public @ResponseBody
-    JSONObject getLesson(ModelMap model, @PathVariable Integer id, HttpServletResponse response) throws IOException {
+    @ResponseBody
+    public JSONObject getLesson(ModelMap model, @PathVariable Integer id, HttpServletResponse response) throws IOException {
         Lesson l = lessonsService.getLesson(id);
         JSONObject obj = new JSONObject();
         obj.put("lesson", l);

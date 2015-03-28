@@ -87,6 +87,7 @@ var query  = function() {
 
     var $searchResults = $("#search-results");
     var $searchResultsContainer = $("#search-results-container");
+    var $searchPagination = $("#search-pagination");
 
     function createNew(data) {
         var clone = $("#new-template").clone();
@@ -107,9 +108,41 @@ var query  = function() {
         return clone;
     }
 
+    function createPagination(curPage, pageQuantity, searchQuery) {
+        if (pageQuantity <= 0) {
+            return null;
+        }
+        var $pagination = $('<ul class="pagination"></ul>');
+        var $leftChevron = $('<li ' + (curPage > 0 ? '' : 'class="disabled"') + '"><a href="#!"><i class="mdi-navigation-chevron-left"></i></a></li>');
+        if (curPage > 0) {
+            $leftChevron.click(function () {
+                query(searchQuery, curPage - 1);
+            });
+        }
+        var $rightChevron = $('<li class="waves-effect ' + (curPage + 1 < pageQuantity ? '' : 'disabled') + '"><a href="#!"><i class="mdi-navigation-chevron-right"></i></a></li>');
+        if (curPage + 1 < pageQuantity) {
+            $rightChevron.click(function () {
+                query(searchQuery, curPage + 1);
+            });
+        }
+        $pagination.append($leftChevron);
+        for (var i = 0; i < pageQuantity; i++) {
+            var $element = $('<li ' + (i == curPage ? '' : 'class="active"') + '><a href="#!">' + (i + 1) + '</a></li>');
+            $pagination.append($element);
+            $element.click(function(page) {
+                return function() {
+                    query(searchQuery, page);
+                };
+            }(i));
+        }
+        $pagination.append($rightChevron);
+        return $pagination;
+    }
+
     var pendingRequest = null;
 
-    return function(query_string, preloader) {
+    return function(query_string, page) {
+        var preloader = $("#preloader");
         if (pendingRequest != null) {
             try {
                 pendingRequest.abort();
@@ -119,12 +152,14 @@ var query  = function() {
         }
         preloader.show();
         $searchResultsContainer.removeClass("hidden");
-        pendingRequest = $.ajax({url: "/HowToDraw/API/search/0?q=" + encodeURI(query_string), contentType: "application/json", dataType: "json"})
+        pendingRequest = $.ajax({url: "/HowToDraw/API/search/" + page + "?q=" + encodeURI(query_string), contentType: "application/json", dataType: "json"})
             //getMockNew()
             .done(function(data) {
                 if (data.success) {
                     $searchResults.empty();
+                    $searchPagination.empty();
                     var lessons = data.lessons;
+                    $searchPagination.append(createPagination(page, data.total, query_string));
                     for (var i = 0; i < lessons.length; i++) {
                         var _lesson = createNew(lessons[i]);
                         $searchResults.append(_lesson);

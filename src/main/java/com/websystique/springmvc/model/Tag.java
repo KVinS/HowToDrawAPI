@@ -7,13 +7,7 @@ package com.websystique.springmvc.model;
 
 import java.util.LinkedList;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.kvins.draw.Parameters;
@@ -35,7 +29,7 @@ public class Tag {
     private String title;
     @Column(name = "TITLE_EN", nullable = false)
     private String titleEn;
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     private List<Lesson> lessons;
 
     @JsonIgnore

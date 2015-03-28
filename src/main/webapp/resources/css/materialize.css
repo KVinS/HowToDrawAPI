@@ -2292,6 +2292,30 @@ td, th {
 .collection.pagination li:hover {
     background-color: #e1f5fe; }
 
+.pagination li {
+    font-size: 1.2rem;
+    float: left;
+    width: 30px;
+    height: 30px;
+    margin: 0 10px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background-clip: padding-box;
+    text-align: center; }
+.pagination li a {
+    color: #444; }
+.pagination li.active a {
+    color: #fff; }
+.pagination li.active {
+    background-color: #ee6e73; }
+.pagination li.disabled a {
+    color: #999; }
+.pagination li i {
+    font-size: 2rem;
+    line-height: 1.8rem; }
+
+
 .secondary-content {
     float: right;
     color: #26a69a; }
