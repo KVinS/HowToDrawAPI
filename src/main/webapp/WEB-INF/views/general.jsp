@@ -19,6 +19,8 @@
         <script src="${pageContext.request.contextPath}/resources/js/errorhandler.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/materialize.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/suggest.js"></script>
+
+        <script src="//vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
     </head>
     <body>
 
@@ -26,7 +28,7 @@
             <div class="nav-wrapper">
                 <a href="#" class="brand-logo right"></a>
                 <ul id="nav-mobile" class="left hide-on-med-and-down">
-                    <li><a href="sass.html">Главная</a></li>
+                    <li><a href="/HowToDraw/">Главная</a></li>
                     <li><a href="components.html">Темы</a></li>
                     <li><a href="javascript.html">Уроки</a></li>
                     <li>
@@ -47,23 +49,35 @@
         </nav>
 
         <script>
+            VK.init(function () {
+                VK.addCallback('onLocationChanged', onLocationChanged);
+                // API initialization succeeded 
+                // Your code here 
+            }, function () {
+                // API initialization failed 
+                // Can reload page here 
+            }, '5.29');
+
+            function onLocationChanged(location) {
+                if (location) {
+                    $("#search").val(location);
+                    selectPage(location);
+                }
+            }
 
             function selectPage(ahref) {
-                if (ahref.toString().split("#")[1] !== undefined) {
-                    var arr = getUrlVars(ahref.toString().split("#")[1]);
-
+                if (ahref !== undefined) {
+                    var arr = getUrlVars(ahref);
                     switch (arr["module"]) {
                         case "search" :
-                            //$("#search").html(query(arr["q"]));
-                            query(arr["q"], arr["page"]);
+                            $("#search").val(decodeURI(arr["q"]));
+                            query(decodeURI(arr["q"]), arr["page"]);
                             break;
                         case "lesson":
                             $(location).attr('href', "/HowToDraw/lesson?lessonID=" + arr["id"] + "&step=" + arr["step"]);
                             break;
                     }
-
                 }
-
             }
 
             function getUrlVars(s)
@@ -84,9 +98,10 @@
                 loadPopular();
                 loadNew();
 
-                selectPage(location.hash);
+                
+                selectPage(location.hash.toString().split("#")[1]);
                 window.addEventListener("popstate", function (e) {
-                    selectPage(location.hash);
+                    selectPage(location.hash.toString().split("#")[1]);
                 }, false);
 
                 var $searchBar = $("#search");

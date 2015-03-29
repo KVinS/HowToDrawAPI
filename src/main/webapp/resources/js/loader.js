@@ -104,6 +104,7 @@ var query = function() {
         overflowTitle.innerHTML = title + overflowTitle.innerHTML;
         clone.find(".lesson-cover").attr("src", coverUri);
         clone.find(".lesson-link").attr("href", "/HowToDraw/lesson?lessonID=" + data.id);
+        //clone.find(".lesson-link").attr("href", "#module=lesson&id="+ data.id+"&step=0");
         clone.find(".lesson-complexity").addClass("complexity-" + complexity);
 
         return clone;
@@ -154,7 +155,7 @@ var query = function() {
         preloader.show();
         $searchResultsContainer.removeClass("hidden");
         
-        
+        VK.callMethod("setLocation", "module=search&page=" + page + "&q="+encodeURI(query_string), false);
         history.pushState(null, null, "/HowToDraw/#module=search&page=" + page + "&q="+encodeURI(query_string));
         
         pendingRequest = $.ajax({url: "/HowToDraw/API/search/" + page + "?q=" + encodeURI(query_string), contentType: "application/json", dataType: "json"})
@@ -199,6 +200,7 @@ var loadNew = function() {
         overflowTitle.innerHTML = title + overflowTitle.innerHTML;
         clone.find(".lesson-cover").attr("src", coverUri);
         clone.find(".lesson-link").attr("href", "/HowToDraw/lesson?lessonID=" + data.id);
+        //clone.find(".lesson-link").attr("href", "#module=lesson&id="+ data.id+"&step=0");
         clone.find(".lesson-complexity").addClass("complexity-" + complexity);
 
         return clone;

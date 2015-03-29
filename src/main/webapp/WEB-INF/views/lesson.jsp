@@ -19,6 +19,8 @@
         <script src="${pageContext.request.contextPath}/resources/js/errorhandler.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/materialize.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/supapaint.js"></script>
+
+        <script src="//vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
     </head>
     <body>
 
@@ -26,7 +28,7 @@
             <div class="nav-wrapper">
                 <a href="#" class="brand-logo right"></a>
                 <ul id="nav-mobile" class="left hide-on-med-and-down">
-                    <li><a href="sass.html">Главная</a></li>
+                    <li><a href="/HowToDraw/">Главная</a></li>
                     <li><a href="components.html">Темы</a></li>
                     <li><a href="javascript.html">Уроки</a></li>
                 </ul>
@@ -34,11 +36,23 @@
         </nav>
 
         <script>
+            VK.init(function () {
+                // API initialization succeeded 
+                // Your code here 
+            }, function () {
+                // API initialization failed 
+                // Can reload page here 
+            }, '5.29');
+
+
             var lessonId = ${lessonID};
             var curStep = ${stepNum};
 
             function updateUrl() {
-                history.pushState(null, null, "/HowToDraw/#module=lesson&id=" + ${lessonID} + "&step=" + curStep);
+                //Если поставить push state, то "Назад" будет переходить к предыдущему шагу.
+                //history.pushState(null, null, "/HowToDraw/#module=lesson&id=" + ${lessonID} + "&step=" + curStep);
+                history.replaceState( {} , '', "/HowToDraw/#module=lesson&id=" + ${lessonID} + "&step=" + curStep);
+                VK.callMethod("setLocation", "module=lesson&id=" + ${lessonID} + "&step=" + curStep, false);
             }
 
             $(function () {
@@ -58,6 +72,7 @@
                     loadLesson($img, lessonId, ++curStep);
                     updateUrl();
                 });
+
                 updateUrl();
 
 
