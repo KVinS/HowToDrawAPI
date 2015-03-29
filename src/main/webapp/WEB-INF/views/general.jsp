@@ -68,7 +68,7 @@
             function selectPage(ahref) {
                 if (ahref !== undefined) {
                     var arr = getUrlVars(ahref);
-                    switch (arr["module"]) {
+                    switch (arr["page"]) {
                         case "search" :
                             $("#search").val(decodeURI(arr["q"]));
                             query(decodeURI(arr["q"]), arr["page"]);

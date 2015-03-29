@@ -50,9 +50,9 @@
 
             function updateUrl() {
                 //Если поставить push state, то "Назад" будет переходить к предыдущему шагу.
-                //history.pushState(null, null, "/HowToDraw/#module=lesson&id=" + ${lessonID} + "&step=" + curStep);
-                history.replaceState( {} , '', "/HowToDraw/#module=lesson&id=" + ${lessonID} + "&step=" + curStep);
-                VK.callMethod("setLocation", "module=lesson&id=" + ${lessonID} + "&step=" + curStep, false);
+                //history.pushState(null, null, "/HowToDraw/#page=lesson&id=" + ${lessonID} + "&step=" + curStep);
+                history.replaceState( {} , '', "/HowToDraw/#page=lesson&id=" + ${lessonID} + "&step=" + curStep);
+                VK.callMethod("setLocation", "page=lesson&id=" + ${lessonID} + "&step=" + curStep, false);
             }
 
             $(function () {
