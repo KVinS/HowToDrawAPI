@@ -12,6 +12,7 @@ function initLoader() {
     suggestion = suggestion();
 }
 
+  
 var loadPopular = function() {
 
     var $popularContainer = $("#popular");
@@ -23,7 +24,7 @@ var loadPopular = function() {
 
         var title = data.titleEn;
         var coverUri = "/HowToDraw/API/lesson_prev/"+ data.id;
-        var description = "��� �������� " + data.titleEn;
+        var description = "Пошаговые уроки рисования на тему " + data.title;
         var link = data.link;
         var complexity = data.complexity;
 
@@ -83,7 +84,7 @@ var suggestion  = function() {
 
 };
 
-var query  = function() {
+var query = function() {
 
     var $searchResults = $("#search-results");
     var $searchResultsContainer = $("#search-results-container");
@@ -152,6 +153,10 @@ var query  = function() {
         }
         preloader.show();
         $searchResultsContainer.removeClass("hidden");
+        
+        
+        history.pushState(null, null, "/HowToDraw/#module=search&page=" + page + "&q="+encodeURI(query_string));
+        
         pendingRequest = $.ajax({url: "/HowToDraw/API/search/" + page + "?q=" + encodeURI(query_string), contentType: "application/json", dataType: "json"})
             //getMockNew()
             .done(function(data) {

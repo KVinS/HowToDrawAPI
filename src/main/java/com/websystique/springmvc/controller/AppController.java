@@ -44,7 +44,9 @@ public class AppController {
     public void getLesson(ModelMap model, @PathVariable Integer id, @RequestParam Integer step, HttpServletResponse response) throws IOException {
         Lesson l = lessonsService.getLesson(id);
 
-        if (step > l.getSteps()) {
+        if (step == null) {
+            step = 0;
+        } else if (step > l.getSteps()) {
             step = l.getSteps();
         }
 
@@ -109,7 +111,7 @@ public class AppController {
     public JSONObject search(ModelMap model, @PathVariable Integer page, @RequestParam String q) {
         SearchPair<Lesson> result = searchService.findLessonsByQuery(q, page);
         List<Lesson> lessons = result.getList();
-        int total  = result.getTotal();
+        int total = result.getTotal();
         JSONObject obj = new JSONObject();
         //System.out.println("УРОКИ ДОСТАНЫ!");
         obj.put("lessons", lessons);
@@ -123,7 +125,7 @@ public class AppController {
     JSONObject getChapters(ModelMap model, @PathVariable Integer page, @RequestParam(value = "sort", required = false, defaultValue = "NEW") SortType sort) {
         SearchPair<Chapter> result = chaptersService.getChapters(page, sort);
         List<Chapter> chapters = result.getList();
-        int total  = result.getTotal();
+        int total = result.getTotal();
         JSONObject obj = new JSONObject();
         obj.put("chapters", chapters);
         obj.put("total", total);
@@ -167,8 +169,12 @@ public class AppController {
     }
 
     @RequestMapping(value = "/lesson", method = RequestMethod.GET)
-    public String openLesson(final ModelMap model, final @RequestParam(required = true) Integer lessonID) {
+    public String openLesson(final ModelMap model, final @RequestParam(required = true) Integer lessonID, @RequestParam(required = false, defaultValue = "0") Integer step) {
         model.put("lessonID", lessonID);
+        if (step == null) {
+            step = 0;
+        }
+        model.put("stepNum", step);
         return "lesson";
     }
 
