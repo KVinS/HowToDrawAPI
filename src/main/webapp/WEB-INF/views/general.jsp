@@ -60,7 +60,6 @@
 
             function onLocationChanged(location) {
                 if (location) {
-                    $("#search").val(location);
                     selectPage(location);
                 }
             }
