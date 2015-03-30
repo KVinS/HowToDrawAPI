@@ -12,8 +12,8 @@ function initLoader() {
     suggestion = suggestion();
 }
 
-  
-var loadPopular = function() {
+
+var loadPopular = function () {
 
     var $popularContainer = $("#popular");
 
@@ -23,7 +23,7 @@ var loadPopular = function() {
         clone = clone.children(0);
 
         var title = data.titleEn;
-        var coverUri = "/HowToDraw/API/lesson_prev/"+ data.id;
+        var coverUri = "/HowToDraw/API/lesson_prev/" + data.id;
         var description = "Пошаговые уроки рисования на тему " + data.title;
         var link = data.link;
         var complexity = data.complexity;
@@ -38,53 +38,53 @@ var loadPopular = function() {
         return clone;
     }
 
-    return function() {
-   $.ajax({url: "/HowToDraw/API/lessons/0?sort=VIEWS", contentType: "application/json", dataType: "json"})
+    return function () {
+        $.ajax({url: "/HowToDraw/API/lessons/0?sort=VIEWS", contentType: "application/json", dataType: "json"})
 //        getMockPopular()
-            .done(function(data) {
-            if (data.success) {
-                var lessons = data.lessons;
-                for (var i = 0; i < lessons.length; i++) {
-                    var _lesson = createPopular(lessons[i]);
-                    $popularContainer.append(_lesson);
-                }
-            } else {
-                handlerError(data.error);
-            }
-        }, function(error) {
-            handlerError(error);
-        });
+                .done(function (data) {
+                    if (data.success) {
+                        var lessons = data.lessons;
+                        for (var i = 0; i < lessons.length; i++) {
+                            var _lesson = createPopular(lessons[i]);
+                            $popularContainer.append(_lesson);
+                        }
+                    } else {
+                        handlerError(data.error);
+                    }
+                }, function (error) {
+                    handlerError(error);
+                });
     }
 };
 
-var suggestion  = function() {
+var suggestion = function () {
 
     var $searchBox = $("#search");
     var suggest = new Suggest.Local("search", "suggest", []);
 
-    return function(query_string) {
+    return function (query_string) {
         $.ajax({url: "/HowToDraw/API/hints/?q=" + encodeURI(query_string), contentType: "application/json", dataType: "json"})
-            //getMockNew()
-            .done(function(data) {
-                if (data.success) {
-                    var hints = [];
-                    for (var i = 0; i < data.hints.length; i++) {
-                        var h = data.hints[i];
-                        hints.push(h.title);
+                //getMockNew()
+                .done(function (data) {
+                    if (data.success) {
+                        var hints = [];
+                        for (var i = 0; i < data.hints.length; i++) {
+                            var h = data.hints[i];
+                            hints.push(h.title);
+                        }
+                        suggest.setCandidateList(hints);
+                        suggest.search();
+                    } else {
+                        handlerError(data.error);
                     }
-                    suggest.setCandidateList(hints);
-                    suggest.search();
-                } else {
-                    handlerError(data.error);
-                }
-            }, function(error) {
-                handlerError(error);
-            });
+                }, function (error) {
+                    handlerError(error);
+                });
     }
 
 };
 
-var query = function() {
+var query = function () {
 
     var $searchResults = $("#search-results");
     var $searchResultsContainer = $("#search-results-container");
@@ -96,7 +96,7 @@ var query = function() {
         clone = clone.children(0);
 
         var title = data.titleEn;
-        var coverUri = "/HowToDraw/API/lesson_prev/"+ data.id;
+        var coverUri = "/HowToDraw/API/lesson_prev/" + data.id;
         var description = data.titleEn;
         var complexity = data.complexity;
 
@@ -115,13 +115,13 @@ var query = function() {
             return null;
         }
         var $pagination = $('<ul class="pagination"></ul>');
-        var $leftChevron = $('<li ' + (curPage > 0 ? '' : 'class="disabled"') + '"><a href="#!"><i class="mdi-navigation-chevron-left"></i></a></li>');
+        var $leftChevron = $('<li ' + (curPage > 0 ? '' : 'class="disabled"') + '"><a href="'+"/HowToDraw/#page=search&page=" +  (curPage > 0 ? (curPage - 1) : 0) + "&q=" + encodeURI(searchQuery)+'"><i class="mdi-navigation-chevron-left"></i></a></li>');
         if (curPage > 0) {
             $leftChevron.click(function () {
                 query(searchQuery, curPage - 1);
             });
         }
-        var $rightChevron = $('<li class="waves-effect ' + (curPage + 1 < pageQuantity ? '' : 'disabled') + '"><a href="#!"><i class="mdi-navigation-chevron-right"></i></a></li>');
+        var $rightChevron = $('<li class="waves-effect ' + (curPage + 1 < pageQuantity ? '' : 'disabled') + '"><a href="'+"/HowToDraw/#page=search&page=" + (curPage + 1) + "&q=" + encodeURI(searchQuery)+'"><i class="mdi-navigation-chevron-right"></i></a></li>');
         if (curPage + 1 < pageQuantity) {
             $rightChevron.click(function () {
                 query(searchQuery, curPage + 1);
@@ -129,10 +129,10 @@ var query = function() {
         }
         $pagination.append($leftChevron);
         for (var i = 0; i < pageQuantity; i++) {
-            var $element = $('<li ' + (i == curPage ? '' : 'class="active"') + '><a href="#!">' + (i + 1) + '</a></li>');
+            var $element = $('<li ' + (i == curPage ? '' : 'class="active"') + '><a href="'+"/HowToDraw/#page=search&page=" + (i) + "&q=" + encodeURI(searchQuery)+'">' + (i + 1) + '</a></li>');
             $pagination.append($element);
-            $element.click(function(page) {
-                return function() {
+            $element.click(function (page) {
+                return function () {
                     query(searchQuery, page);
                 };
             }(i));
@@ -143,7 +143,10 @@ var query = function() {
 
     var pendingRequest = null;
 
-    return function(query_string, page) {
+    return function (query_string, page) {
+
+
+
         var preloader = $("#preloader");
         if (pendingRequest != null) {
             try {
@@ -154,35 +157,34 @@ var query = function() {
         }
         preloader.show();
         $searchResultsContainer.removeClass("hidden");
-        
-        VK.callMethod("setLocation", "page=search&page=" + page + "&q="+encodeURI(query_string), false);
-        history.pushState(null, null, "/HowToDraw/#page=search&page=" + page + "&q="+encodeURI(query_string));
-        
+
         pendingRequest = $.ajax({url: "/HowToDraw/API/search/" + page + "?q=" + encodeURI(query_string), contentType: "application/json", dataType: "json"})
-            //getMockNew()
-            .done(function(data) {
-                if (data.success) {
-                    $searchResults.empty();
-                    $searchPagination.empty();
-                    var lessons = data.lessons;
-                    $searchPagination.append(createPagination(page, data.total, query_string));
-                    for (var i = 0; i < lessons.length; i++) {
-                        var _lesson = createNew(lessons[i]);
-                        $searchResults.append(_lesson);
+                //getMockNew()
+                .done(function (data) {
+                    VK.callMethod("setLocation", "page=search&page=" + page + "&q=" + encodeURI(query_string), false);
+                    history.pushState(null, null, "/HowToDraw/#page=search&page=" + page + "&q=" + encodeURI(query_string));
+                    if (data.success) {
+                        $searchResults.empty();
+                        $searchPagination.empty();
+                        var lessons = data.lessons;
+                        $searchPagination.append(createPagination(page, data.total, query_string));
+                        for (var i = 0; i < lessons.length; i++) {
+                            var _lesson = createNew(lessons[i]);
+                            $searchResults.append(_lesson);
+                        }
+                    } else {
+                        handlerError(data.error);
                     }
-                } else {
-                    handlerError(data.error);
-                }
-            }, function(error) {
-                handlerError(error);
-            }).always(function() {
-                preloader.hide();
-            });
+                }, function (error) {
+                    handlerError(error);
+                }).always(function () {
+            preloader.hide();
+        });
     }
 
 };
 
-var loadNew = function() {
+var loadNew = function () {
 
     var $newContainer = $("#new");
 
@@ -192,7 +194,7 @@ var loadNew = function() {
         clone = clone.children(0);
 
         var title = data.titleEn;
-        var coverUri = "/HowToDraw/API/lesson_prev/"+ data.id;
+        var coverUri = "/HowToDraw/API/lesson_prev/" + data.id;
         var description = data.titleEn;
         var complexity = data.complexity;
 
@@ -206,36 +208,36 @@ var loadNew = function() {
         return clone;
     }
 
-    return function() {
-   $.ajax({url: "/HowToDraw/API/lessons/0?sort=NEW", contentType: "application/json", dataType: "json"})
-       //getMockNew()
-        .done(function(data) {
-            if (data.success) {
-                var lessons = data.lessons;
-                for (var i = 0; i < lessons.length; i++) {
-                    var _lesson = createNew(lessons[i]);
-                    $newContainer.append(_lesson);
-                }
-            } else {
-                handlerError(data.error);
-            }
-        }, function(error) {
-            handlerError(error);
-        });
+    return function () {
+        $.ajax({url: "/HowToDraw/API/lessons/0?sort=NEW", contentType: "application/json", dataType: "json"})
+                //getMockNew()
+                .done(function (data) {
+                    if (data.success) {
+                        var lessons = data.lessons;
+                        for (var i = 0; i < lessons.length; i++) {
+                            var _lesson = createNew(lessons[i]);
+                            $newContainer.append(_lesson);
+                        }
+                    } else {
+                        handlerError(data.error);
+                    }
+                }, function (error) {
+                    handlerError(error);
+                });
     }
 
 };
 
-var loadLesson = function(img, lessonId, step) {
+var loadLesson = function (img, lessonId, step) {
     $(img).unbind("load");
     $(img).attr('src', '/HowToDraw/API/lesson/' + lessonId + '?step=' + step)
-        .load(function() {
-            if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
-                alert('broken image!');
-            } else {
-                console.log("good");
-            }
-        })
+            .load(function () {
+                if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
+                    alert('broken image!');
+                } else {
+                    console.log("good");
+                }
+            })
 
 };
 
