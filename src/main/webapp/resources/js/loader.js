@@ -23,10 +23,9 @@ var loadPopular = function () {
         clone = clone.children(0);
 
         var title = data.titleEn;
-        var coverUri = "/HowToDraw/API/lesson_prev/" + data.id;
+        var coverUri = "/HowToDraw/API/chapter_prev/"+ data.id;
         var description = "Пошаговые уроки рисования на тему " + data.title;
         var link = data.link;
-        var complexity = data.complexity;
 
         clone.find(".lesson-title").text(title);
         var overflowTitle = clone.find(".lesson-title-overflow")[0];
@@ -38,22 +37,22 @@ var loadPopular = function () {
         return clone;
     }
 
-    return function () {
-        $.ajax({url: "/HowToDraw/API/lessons/0?sort=VIEWS", contentType: "application/json", dataType: "json"})
+    return function() {
+   $.ajax({url: "/HowToDraw/API/chapters/0?sort=VIEWS", contentType: "application/json", dataType: "json"})
 //        getMockPopular()
-                .done(function (data) {
-                    if (data.success) {
-                        var lessons = data.lessons;
-                        for (var i = 0; i < lessons.length; i++) {
-                            var _lesson = createPopular(lessons[i]);
-                            $popularContainer.append(_lesson);
-                        }
-                    } else {
-                        handlerError(data.error);
-                    }
-                }, function (error) {
-                    handlerError(error);
-                });
+            .done(function(data) {
+            if (data.success) {
+                var chapters = data.chapters;
+                for (var i = 0; i < chapters.length; i++) {
+                    var _chapter = createPopular(chapters[i]);
+                    $popularContainer.append(_chapter);
+                }
+            } else {
+                handlerError(data.error);
+            }
+        }, function(error) {
+            handlerError(error);
+        });
     }
 };
 
@@ -129,7 +128,7 @@ var query = function () {
         }
         $pagination.append($leftChevron);
         for (var i = 0; i < pageQuantity; i++) {
-            var $element = $('<li ' + (i == curPage ? '' : 'class="active"') + '><a href="'+"/HowToDraw/#page=search&page=" + (i) + "&q=" + encodeURI(searchQuery)+'">' + (i + 1) + '</a></li>');
+            var $element = $('<li ' + (i == curPage ? 'class="active"' : '') + '><a href="#!">' + (i + 1) + '</a></li>');
             $pagination.append($element);
             $element.click(function (page) {
                 return function () {
