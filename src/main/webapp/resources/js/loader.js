@@ -128,7 +128,7 @@ var query = function () {
         }
         $pagination.append($leftChevron);
         for (var i = 0; i < pageQuantity; i++) {
-            var $element = $('<li ' + (i == curPage ? 'class="active"' : '') + '><a href="#!">' + (i + 1) + '</a></li>');
+            var $element = $('<li ' + (i == curPage ? 'class="active"' : '') + '><a href="'+"/HowToDraw/#page=search&page=" + i + "&q=" + encodeURI(searchQuery)+'">' + (i + 1) + '</a></li>');
             $pagination.append($element);
             $element.click(function (page) {
                 return function () {

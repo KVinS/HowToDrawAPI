@@ -202,7 +202,7 @@
 
                 <div class="row" id="popular">
                     <div class="col s12 m12">
-                        <h4 class="light">Популярное</h4>
+                        <h4 class="light">Популярные темы</h4>
                     </div>
 
                 </div>
