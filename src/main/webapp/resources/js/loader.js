@@ -114,13 +114,13 @@ var query = function () {
             return null;
         }
         var $pagination = $('<ul class="pagination"></ul>');
-        var $leftChevron = $('<li ' + (curPage > 0 ? '' : 'class="disabled"') + '"><a href="'+"/HowToDraw/#page=search&page=" +  (curPage > 0 ? (curPage - 1) : 0) + "&q=" + encodeURI(searchQuery)+'"><i class="mdi-navigation-chevron-left"></i></a></li>');
+        var $leftChevron = $('<li ' + (curPage > 0 ? '' : 'class="disabled"') + '"><a href="'+"/HowToDraw/#page=search&p=" +  (curPage > 0 ? (curPage - 1) : 0) + "&q=" + encodeURI(searchQuery)+'"><i class="mdi-navigation-chevron-left"></i></a></li>');
         if (curPage > 0) {
             $leftChevron.click(function () {
                 query(searchQuery, curPage - 1);
             });
         }
-        var $rightChevron = $('<li class="waves-effect ' + (curPage + 1 < pageQuantity ? '' : 'disabled') + '"><a href="'+"/HowToDraw/#page=search&page=" + (curPage + 1) + "&q=" + encodeURI(searchQuery)+'"><i class="mdi-navigation-chevron-right"></i></a></li>');
+        var $rightChevron = $('<li class="waves-effect ' + (curPage + 1 < pageQuantity ? '' : 'disabled') + '"><a href="'+"/HowToDraw/#page=search&p=" + (curPage + 1) + "&q=" + encodeURI(searchQuery)+'"><i class="mdi-navigation-chevron-right"></i></a></li>');
         if (curPage + 1 < pageQuantity) {
             $rightChevron.click(function () {
                 query(searchQuery, curPage + 1);
@@ -128,7 +128,7 @@ var query = function () {
         }
         $pagination.append($leftChevron);
         for (var i = 0; i < pageQuantity; i++) {
-            var $element = $('<li ' + (i == curPage ? 'class="active"' : '') + '><a href="'+"/HowToDraw/#page=search&page=" + i + "&q=" + encodeURI(searchQuery)+'">' + (i + 1) + '</a></li>');
+            var $element = $('<li ' + (i == curPage ? 'class="active"' : '') + '><a href="'+"/HowToDraw/#page=search&p=" + i + "&q=" + encodeURI(searchQuery)+'">' + (i + 1) + '</a></li>');
             $pagination.append($element);
             $element.click(function (page) {
                 return function () {
@@ -160,8 +160,8 @@ var query = function () {
         pendingRequest = $.ajax({url: "/HowToDraw/API/search/" + page + "?q=" + encodeURI(query_string), contentType: "application/json", dataType: "json"})
                 //getMockNew()
                 .done(function (data) {
-                    VK.callMethod("setLocation", "page=search&page=" + page + "&q=" + encodeURI(query_string), false);
-                    history.pushState(null, null, "/HowToDraw/#page=search&page=" + page + "&q=" + encodeURI(query_string));
+                    VK.callMethod("setLocation", "page=search&p=" + page + "&q=" + encodeURI(query_string), false);
+                    history.pushState(null, null, "/HowToDraw/#page=search&p=" + page + "&q=" + encodeURI(query_string));
                     if (data.success) {
                         $searchResults.empty();
                         $searchPagination.empty();

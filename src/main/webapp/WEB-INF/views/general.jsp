@@ -70,7 +70,7 @@
                     switch (arr["page"]) {
                         case "search" :
                             $("#search").val(decodeURI(arr["q"]));
-                            query(decodeURI(arr["q"]), arr["page"]);
+                            query(decodeURI(arr["q"]), arr["p"]);
                             break;
                         case "lesson":
                             $(location).attr('href', "/HowToDraw/lesson?lessonID=" + arr["id"] + "&step=" + arr["step"]);
