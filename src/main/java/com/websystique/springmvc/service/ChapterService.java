@@ -7,8 +7,10 @@ package com.websystique.springmvc.service;
 
 import com.websystique.springmvc.dao.ChapterDAO;
 import com.websystique.springmvc.model.Chapter;
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kvins.draw.SearchPair;
@@ -24,6 +26,9 @@ public class ChapterService {
 
     @Autowired
     private ChapterDAO chapterDAO;
+    @Autowired
+    private Environment environment;
+    private String chapterPreviewURI= null;
 
     public void persistChapter(Chapter chapter) {
         chapterDAO.<Chapter>persist(chapter);
@@ -60,5 +65,16 @@ public class ChapterService {
 
     public Chapter getChapter(String code) {
         return chapterDAO.getChapterByCode(code);
+    }
+    
+    
+    public String getChapterPreviewURI() {
+        return chapterPreviewURI;
+    }
+
+    
+    @PostConstruct
+    private void init() {
+        chapterPreviewURI = environment.getProperty("chapters.previewURI");
     }
 }

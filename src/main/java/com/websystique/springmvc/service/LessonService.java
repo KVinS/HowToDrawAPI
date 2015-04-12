@@ -37,7 +37,6 @@ public class LessonService {
 
     private String baseURI = null;
     private String lessonPreviewURI = null;
-    private String chapterPreviewURI= null;
 
     public String getBaseURI() {
         return baseURI;
@@ -47,15 +46,10 @@ public class LessonService {
         return lessonPreviewURI;
     }
 
-    public String getChapterPreviewURI() {
-        return chapterPreviewURI;
-    }
-
     @PostConstruct
     private void init() {
         baseURI = environment.getProperty("lessons.baseURI");
         lessonPreviewURI = environment.getProperty("lessons.previewURI");
-        chapterPreviewURI = environment.getProperty("chapters.previewURI");
     }
 
     public void persistLesson(Lesson lesson) {

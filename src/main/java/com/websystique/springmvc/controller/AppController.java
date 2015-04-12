@@ -151,10 +151,8 @@ public class AppController {
     public void getChapterPreview(ModelMap model, @PathVariable Integer id, HttpServletResponse response) {
         Chapter c = chaptersService.getChapter(id);
         if (c != null) {
-
-            String baseURI = lessonsService.getLessonPreviewURI();
-            String path = baseURI.replace("#{lessonID}", "" + id);
-            path = path.replace("#{chapter}", c.getCode());
+            String baseURI = chaptersService.getChapterPreviewURI();
+            String path = baseURI.replace("#{chapter}", c.getCode());
 
             if (!"".equals(c.getImg())) {
                 path = c.getImg();
