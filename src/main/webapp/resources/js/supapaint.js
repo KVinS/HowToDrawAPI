@@ -11,6 +11,8 @@ function SuperPaint() {
 
     var width = 0;
     var height = 0;
+    var mode = "normal";
+    var color = "#000000";
 
     this.init = function(_container, _layersSelect) {
         $container = $(_container);
@@ -35,8 +37,15 @@ function SuperPaint() {
         }
         $layersSelect.material_select();
         $layersSelect.on('change', function() {
-            alert( this.value ); // or $(this).val()
         });
+    };
+
+    this.toggleFlood = function() {
+        mode = (mode == "normal" ? "flood" : "normal");
+    };
+
+    this.setColor = function(hex) {
+        color = "#" + hex;
     };
 
     this.addLayer = function(name) {
@@ -151,21 +160,34 @@ function SuperPaint() {
             return $layer;
         };
 
+        this.getContext = function() {
+            return context;
+        };
+
 
         //drawing specific
 
         var clickX = [];
         var clickY = [];
+        var clickColor = [];
         var clickDrag = [];
         var paint;
 
         this.mousedown = function(e) {
-            var offset = $layer.offset();
-            this.offsetLeft = offset.left;
-            this.offsetTop = offset.top;
-            paint = true;
-            addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
-            redraw();
+            if (mode == "normal") {
+                var offset = $layer.offset();
+                this.offsetLeft = offset.left;
+                this.offsetTop = offset.top;
+                paint = true;
+                addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
+                redraw();
+            } else if (mode == "flood") {
+                clickX = [];
+                clickY = [];
+                clickColor = [];
+                clickDrag = [];
+                fill(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, canvas, context);
+            }
         };
 
         this.mousemove = function(e) {
@@ -189,13 +211,13 @@ function SuperPaint() {
         function addClick(x, y, dragging) {
             clickX.push(x);
             clickY.push(y);
+            clickColor.push(color);
             clickDrag.push(dragging);
         }
 
         function redraw(){
-            context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
+//            context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
 
-            context.strokeStyle = "#df4b26";
             context.lineJoin = "round";
             context.lineWidth = 25;
 
@@ -208,11 +230,136 @@ function SuperPaint() {
                 }
                 context.lineTo(clickX[i], clickY[i]);
                 context.closePath();
+                context.strokeStyle = clickColor[i];
                 context.stroke();
+            }
+            if (!clickDrag[clickX.length - 1]) {
+                clickX = [];
+                clickY = [];
+                clickColor = [];
+                clickDrag = [];
+            } else {
+                _splice(clickX);
+                _splice(clickY);
+                _splice(clickColor);
+                _splice(clickDrag);
             }
         }
 
         return this;
     }
 
+    function _splice(array) {
+        array.splice(0, array.length - 2);
+    }
+
+    function fill(startX, startY, canvas, context) {
+
+        var pixelStack = [[startX, startY]];
+        var canvasHeight = canvas.height;
+        var canvasWidth = canvas.width;
+        var colorLayer = context.getImageData(0, 0, canvasWidth, canvasHeight);
+
+        pixelPos = (startY * canvasWidth + startX) * 4;
+
+        var startR = colorLayer.data[pixelPos];
+        var startG = colorLayer.data[pixelPos + 1];
+        var startB = colorLayer.data[pixelPos + 2];
+
+        var c = hexToRgb(color);
+
+        var fillColorR = c.r;
+        var fillColorG = c.g;
+        var fillColorB = c.b;
+
+        if (fillColorR == startR && fillColorG == startG && fillColorB == startB) {
+            return;
+        }
+
+        var drawingBoundTop = 0;
+
+
+        while(pixelStack.length)
+        {
+            var newPos, x, y, pixelPos, reachLeft, reachRight;
+            newPos = pixelStack.pop();
+            x = newPos[0];
+            y = newPos[1];
+
+            pixelPos = (y*canvasWidth + x) * 4;
+            while(y-- >= drawingBoundTop && matchStartColor(pixelPos))
+            {
+                pixelPos -= canvasWidth * 4;
+            }
+            pixelPos += canvasWidth * 4;
+            ++y;
+            reachLeft = false;
+            reachRight = false;
+            while(y++ < canvasHeight-1 && matchStartColor(pixelPos))
+            {
+                colorPixel(pixelPos);
+
+                if(x > 0)
+                {
+                    if(matchStartColor(pixelPos - 4))
+                    {
+                        if(!reachLeft){
+                            pixelStack.push([x - 1, y]);
+                            reachLeft = true;
+                        }
+                    }
+                    else if(reachLeft)
+                    {
+                        reachLeft = false;
+                    }
+                }
+
+                if(x < canvasWidth-1)
+                {
+                    if(matchStartColor(pixelPos + 4))
+                    {
+                        if(!reachRight)
+                        {
+                            pixelStack.push([x + 1, y]);
+                            reachRight = true;
+                        }
+                    }
+                    else if(reachRight)
+                    {
+                        reachRight = false;
+                    }
+                }
+
+                pixelPos += canvasWidth * 4;
+            }
+        }
+        context.putImageData(colorLayer, 0, 0);
+
+        function matchStartColor(pixelPos)
+        {
+            var r = colorLayer.data[pixelPos];
+            var g = colorLayer.data[pixelPos+1];
+            var b = colorLayer.data[pixelPos+2];
+
+            return (r == startR && g == startG && b == startB);
+        }
+
+        function colorPixel(pixelPos)
+        {
+            colorLayer.data[pixelPos] = fillColorR;
+            colorLayer.data[pixelPos+1] = fillColorG;
+            colorLayer.data[pixelPos+2] = fillColorB;
+            colorLayer.data[pixelPos+3] = 255;
+        }
+    }
+
+}
+
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
 }

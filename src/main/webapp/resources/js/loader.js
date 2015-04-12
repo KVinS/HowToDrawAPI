@@ -83,6 +83,37 @@ var suggestion = function () {
 
 };
 
+function createPagination(curPage, pageQuantity, callback) {
+    if (pageQuantity <= 0) {
+        return null;
+    }
+    var $pagination = $('<ul class="pagination"></ul>');
+    var $leftChevron = $('<li class="waves-effect ' + (curPage > 0 ? '' : 'class="disabled"') + '"><i class="mdi-navigation-chevron-left"></i></a></li>');
+    if (curPage > 0) {
+        $leftChevron.click(function () {
+            callback(curPage - 1);
+        });
+    }
+    var $rightChevron = $('<li class="waves-effect ' + (curPage + 1 < pageQuantity ? '' : 'disabled') + '"><i class="mdi-navigation-chevron-right"></i></a></li>');
+    if (curPage + 1 < pageQuantity) {
+        $rightChevron.click(function () {
+            callback(curPage + 1);
+        });
+    }
+    $pagination.append($leftChevron);
+    for (var i = 0; i < pageQuantity; i++) {
+        var $element = $('<li ' + (i == curPage ? 'class="active"' : 'class="waves-effect"') + '>' + (i + 1) + '</a></li>');
+        $pagination.append($element);
+        $element.click(function (page) {
+            return function () {
+                callback(page);
+            };
+        }(i));
+    }
+    $pagination.append($rightChevron);
+    return $pagination;
+}
+
 var query = function () {
 
     var $searchResults = $("#search-results");
@@ -109,42 +140,9 @@ var query = function () {
         return clone;
     }
 
-    function createPagination(curPage, pageQuantity, searchQuery) {
-        if (pageQuantity <= 0) {
-            return null;
-        }
-        var $pagination = $('<ul class="pagination"></ul>');
-        var $leftChevron = $('<li ' + (curPage > 0 ? '' : 'class="disabled"') + '"><a href="'+"/HowToDraw/#page=search&p=" +  (curPage > 0 ? (curPage - 1) : 0) + "&q=" + encodeURI(searchQuery)+'"><i class="mdi-navigation-chevron-left"></i></a></li>');
-        if (curPage > 0) {
-            $leftChevron.click(function () {
-                query(searchQuery, curPage - 1);
-            });
-        }
-        var $rightChevron = $('<li class="waves-effect ' + (curPage + 1 < pageQuantity ? '' : 'disabled') + '"><a href="'+"/HowToDraw/#page=search&p=" + (curPage + 1) + "&q=" + encodeURI(searchQuery)+'"><i class="mdi-navigation-chevron-right"></i></a></li>');
-        if (curPage + 1 < pageQuantity) {
-            $rightChevron.click(function () {
-                query(searchQuery, curPage + 1);
-            });
-        }
-        $pagination.append($leftChevron);
-        for (var i = 0; i < pageQuantity; i++) {
-            var $element = $('<li ' + (i == curPage ? 'class="active"' : '') + '><a href="'+"/HowToDraw/#page=search&p=" + i + "&q=" + encodeURI(searchQuery)+'">' + (i + 1) + '</a></li>');
-            $pagination.append($element);
-            $element.click(function (page) {
-                return function () {
-                    query(searchQuery, page);
-                };
-            }(i));
-        }
-        $pagination.append($rightChevron);
-        return $pagination;
-    }
-
     var pendingRequest = null;
 
     return function (query_string, page) {
-
-
 
         var preloader = $("#preloader");
         if (pendingRequest != null) {
@@ -163,10 +161,12 @@ var query = function () {
                     VK.callMethod("setLocation", "page=search&p=" + page + "&q=" + encodeURI(query_string), false);
                     history.pushState(null, null, "/HowToDraw/#page=search&p=" + page + "&q=" + encodeURI(query_string));
                     if (data.success) {
+                        var lessons = data.lessons;
                         $searchResults.empty();
                         $searchPagination.empty();
-                        var lessons = data.lessons;
-                        $searchPagination.append(createPagination(page, data.total, query_string));
+                        $searchPagination.append(createPagination(page, data.total, function(page) {
+                            query(query_string, page);
+                        }));
                         for (var i = 0; i < lessons.length; i++) {
                             var _lesson = createNew(lessons[i]);
                             $searchResults.append(_lesson);
@@ -186,6 +186,7 @@ var query = function () {
 var loadNew = function () {
 
     var $newContainer = $("#new");
+    var $newPagination = $("#new-pagination");
 
     function createNew(data) {
         var clone = $("#new-template").clone();
@@ -207,12 +208,18 @@ var loadNew = function () {
         return clone;
     }
 
-    return function () {
-        $.ajax({url: "/HowToDraw/API/lessons/0?sort=NEW", contentType: "application/json", dataType: "json"})
+    return function (page) {
+        $.ajax({url: "/HowToDraw/API/lessons/" + page + "?sort=NEW", contentType: "application/json", dataType: "json"})
                 //getMockNew()
                 .done(function (data) {
                     if (data.success) {
                         var lessons = data.lessons;
+                        var total = data.total;
+                        $newPagination.empty();
+                        $newContainer.empty();
+                        $newPagination.append(createPagination(page, total, function(page) {
+                            loadNew(page);
+                        }));
                         for (var i = 0; i < lessons.length; i++) {
                             var _lesson = createNew(lessons[i]);
                             $newContainer.append(_lesson);

@@ -13,11 +13,13 @@
         <title>Draw</title>
         <link href="${pageContext.request.contextPath}/resources/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
         <link href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="${pageContext.request.contextPath}/resources/css/colpick.css" type="text/css" rel="stylesheet" media="screen,projection">
         <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.3.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/mocklessons.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/loader.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/errorhandler.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/materialize.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/js/colpick.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/supapaint.js"></script>
 
         <script src="//vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
@@ -86,9 +88,25 @@
                 $("#create_layer").click(function () {
                     paint.addLayer($("#layer_name").val());
                 });
+                $("#flood").click(function () {
+                    $(this).toggleClass("grey green");
+                    paint.toggleFlood();
+                });
                 $("#remove_layer").click(function () {
                     paint.removeLayer($("#layer_name").val());
                 });
+
+                paint.setColor("ff8800");
+                $('.color-box').colpick({
+                    colorScheme:'dark',
+                    layout:'rgbhex',
+                    color:'ff8800',
+                    onSubmit:function(hsb,hex,rgb,el) {
+                        $(el).css('background-color', '#'+hex);
+                        $(el).colpickHide();
+                        paint.setColor(hex);
+                    }
+                }).css('background-color', '#ff8800');
 
             });
         </script>
@@ -126,6 +144,17 @@
                 top: 0;
             }
 
+            .color-box {
+                width:30px;
+                height:30px;
+                margin:5px;
+                border: 1px solid white;
+            }
+
+            .colpick {
+                z-index: 10000;
+            }
+
         </style>
 
         <div class="row">
@@ -137,6 +166,9 @@
                     <div class="col s12 m12 l12">
                         <div class="waves-effect waves-light btn" id="back">Back</div>
                         <div class="waves-effect waves-light btn" id="forward">Forward</div>
+                        <div class="waves-effect waves-light btn grey" id="flood">Flood</div>
+                        <div class="color-box"></div>
+
                         <input id="layer_name" type="text"/>
                         <div class="waves-effect waves-light btn" id="create_layer">Create layer</div>
                         <div class="waves-effect waves-light btn" id="remove_layer">Remove layer</div>

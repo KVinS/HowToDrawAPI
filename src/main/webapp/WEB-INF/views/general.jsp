@@ -95,7 +95,7 @@
             $(function () {
                 initLoader();
                 loadPopular();
-                loadNew();
+                loadNew(0);
 
                 
                 selectPage(location.hash.toString().split("#")[1]);
@@ -192,10 +192,18 @@
 
                 </div>
 
-                <div class="row" id="new">
+                <div class="row">
 
                     <div class="col s12 m12">
                         <h4 class="light">Новые уроки</h4>
+                    </div>
+
+                    <div class="col s12 m12">
+                        <div class="row" id="new"></div>
+                    </div>
+
+                    <div class="row" id="new-pagination">
+
                     </div>
 
                 </div>
