@@ -25,7 +25,7 @@ var loadPopular = function () {
         var title = data.titleEn;
         var coverUri = "/HowToDraw/API/chapter_prev/" + data.id;
         var description = "Пошаговые уроки рисования на тему " + data.title;
-        var link = data.link;
+        var link =  "javascript:query('"+data.code+"', 0)";
 
         clone.find(".lesson-title").text(title);
         var overflowTitle = clone.find(".lesson-title-overflow")[0];
