@@ -102,12 +102,12 @@ function createPagination(curPage, pageQuantity, callback) {
         };
     }(0));
 
-    var $finishElement = $('<li ' + (pageQuantity == curPage ? 'class="active"' : 'class="waves-effect"') + '>' + (pageQuantity+1) + '</a></li>');
+    var $finishElement = $('<li ' + (pageQuantity - 1 == curPage ? 'class="active"' : 'class="waves-effect"') + '>' + (pageQuantity) + '</a></li>');
     $finishElement.click(function (page) {
         return function () {
             callback(page);
         };
-    }(pageQuantity));
+    }(pageQuantity - 1));
 
     var $rightChevron = $('<li class="waves-effect ' + (curPage + 1 < pageQuantity ? '' : 'disabled') + '"><i class="mdi-navigation-chevron-right"></i></a></li>');
     if (curPage + 1 < pageQuantity) {
@@ -115,14 +115,14 @@ function createPagination(curPage, pageQuantity, callback) {
             callback(curPage + 1);
         });
     }
-    
+
     $pagination.append($leftChevron);
     $pagination.append($startElement);
 
     var iLeft = 3;
     var iRight = 3;
-    if (curPage > iLeft && curPage < (pageQuantity - iRight)){
-        for (i = curPage - iLeft; i <= curPage + iRight; i++)
+    if (curPage > iLeft && curPage < (pageQuantity - iRight)) {
+        for (i = curPage - iLeft; i <= curPage + iRight - 1; i++)
         {
             var $element = $('<li ' + (i == curPage ? 'class="active"' : 'class="waves-effect"') + '>' + (i + 1) + '</a></li>');
             $pagination.append($element);
@@ -133,9 +133,13 @@ function createPagination(curPage, pageQuantity, callback) {
             }(i));
         }
     } else if (curPage <= iLeft) {
-        iSlice = 1 + iLeft - curPage;
-        for (i = 1; i <= curPage + (iRight + iSlice); i++)
-        {
+        if (pageQuantity - (iRight + curPage) >= 0) {
+            iSlice = iRight + curPage;
+        } else {
+            iSlice = pageQuantity - 1;
+        }
+        for (i = 1; i < (iSlice); i++) {
+            //alert("THIS" + (curPage + iSlice))
             var $element = $('<li ' + (i == curPage ? 'class="active"' : 'class="waves-effect"') + '>' + (i + 1) + '</a></li>');
             $pagination.append($element);
             $element.click(function (page) {
@@ -146,11 +150,11 @@ function createPagination(curPage, pageQuantity, callback) {
         }
     } else {
         iSlice = iRight - (pageQuantity - curPage);
-        for (i = curPage - (iLeft + iSlice); i < pageQuantity; i++)
+        for (i = curPage - (iLeft + iSlice); i < pageQuantity - 1; i++)
         {
-            if (curPage > iLeft && curPage <= (pageQuantity ))
+            if (curPage > iLeft && curPage <= (pageQuantity))
             {
-                for (i = curPage - iLeft; i < pageQuantity; i++)
+                for (i = curPage - iLeft; i < pageQuantity - 1; i++)
                 {
                     var $element = $('<li ' + (i == curPage ? 'class="active"' : 'class="waves-effect"') + '>' + (i + 1) + '</a></li>');
                     $pagination.append($element);
@@ -163,7 +167,7 @@ function createPagination(curPage, pageQuantity, callback) {
             }
         }
     }
-    
+
     $pagination.append($finishElement);
     $pagination.append($rightChevron);
     return $pagination;
