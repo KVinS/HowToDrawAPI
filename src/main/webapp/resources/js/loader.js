@@ -84,6 +84,8 @@ var suggestion = function () {
 };
 
 function createPagination(curPage, pageQuantity, callback) {
+    curPage = parseInt(curPage);
+    
     if (pageQuantity <= 0) {
         return null;
     }
@@ -119,18 +121,18 @@ function createPagination(curPage, pageQuantity, callback) {
     $pagination.append($leftChevron);
     $pagination.append($startElement);
 
-    var iLeft = 3;
-    var iRight = 3;
+    var iLeft = 4;
+    var iRight = 5;
 
     var start = 1;
     var finish = pageQuantity;
-    
+
     if (curPage > iLeft && curPage < (pageQuantity - iRight)) {
         start = curPage - iLeft;
         finish = curPage + iRight;
     } else if (curPage <= iLeft) {
         start = 1;
-        if (pageQuantity - (iRight + curPage) >= 0) {
+        if ((pageQuantity - (iRight + curPage)) >= 0) {
             finish = iRight + curPage - 1;
         } else {
             finish = pageQuantity - 1;
@@ -269,6 +271,9 @@ var loadNew = function () {
                             var _lesson = createNew(lessons[i]);
                             $newContainer.append(_lesson);
                         }
+
+                        VK.callMethod("setLocation", "page=new_lessons&p=" + page, false);
+                        history.pushState(null, null, "/HowToDraw/#page=new_lessons&p=" + page);
                     } else {
                         handlerError(data.error);
                     }

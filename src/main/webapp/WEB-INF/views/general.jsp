@@ -65,6 +65,8 @@
             }
 
             function selectPage(ahref) {
+                var needLoadNew = true; 
+                
                 if (ahref !== undefined) {
                     var arr = getUrlVars(ahref);
                     switch (arr["page"]) {
@@ -72,10 +74,18 @@
                             $("#search").val(decodeURI(arr["q"]));
                             query(decodeURI(arr["q"]), arr["p"]);
                             break;
+                        case "new_lessons" :
+                            loadNew(arr["p"]);
+                            needLoadNew = false;
+                            break;
                         case "lesson":
                             $(location).attr('href', "/HowToDraw/lesson?lessonID=" + arr["id"] + "&step=" + arr["step"]);
                             break;
                     }
+                }
+                
+                if(needLoadNew){
+                loadNew(0);
                 }
             }
 
@@ -95,8 +105,6 @@
             $(function () {
                 initLoader();
                 loadPopular();
-                loadNew(0);
-
                 
                 selectPage(location.hash.toString().split("#")[1]);
                 window.addEventListener("popstate", function (e) {
