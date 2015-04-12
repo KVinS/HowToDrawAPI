@@ -121,51 +121,37 @@ function createPagination(curPage, pageQuantity, callback) {
 
     var iLeft = 3;
     var iRight = 3;
+
+    var start = 1;
+    var finish = pageQuantity;
+    
     if (curPage > iLeft && curPage < (pageQuantity - iRight)) {
-        for (i = curPage - iLeft; i <= curPage + iRight - 1; i++)
-        {
-            var $element = $('<li ' + (i == curPage ? 'class="active"' : 'class="waves-effect"') + '>' + (i + 1) + '</a></li>');
-            $pagination.append($element);
-            $element.click(function (page) {
-                return function () {
-                    callback(page);
-                };
-            }(i));
-        }
+        start = curPage - iLeft;
+        finish = curPage + iRight;
     } else if (curPage <= iLeft) {
+        start = 1;
         if (pageQuantity - (iRight + curPage) >= 0) {
-            iSlice = iRight + curPage;
+            finish = iRight + curPage - 1;
         } else {
-            iSlice = pageQuantity - 1;
-        }
-        for (i = 1; i < (iSlice); i++) {
-            //alert("THIS" + (curPage + iSlice))
-            var $element = $('<li ' + (i == curPage ? 'class="active"' : 'class="waves-effect"') + '>' + (i + 1) + '</a></li>');
-            $pagination.append($element);
-            $element.click(function (page) {
-                return function () {
-                    callback(page);
-                };
-            }(i));
+            finish = pageQuantity - 1;
         }
     } else {
-        iSlice = iRight - (pageQuantity - curPage);
-        for (i = curPage - (iLeft + iSlice); i < pageQuantity - 1; i++)
+        if (curPage > iLeft && curPage <= (pageQuantity))
         {
-            if (curPage > iLeft && curPage <= (pageQuantity))
-            {
-                for (i = curPage - iLeft; i < pageQuantity - 1; i++)
-                {
-                    var $element = $('<li ' + (i == curPage ? 'class="active"' : 'class="waves-effect"') + '>' + (i + 1) + '</a></li>');
-                    $pagination.append($element);
-                    $element.click(function (page) {
-                        return function () {
-                            callback(page);
-                        };
-                    }(i));
-                }
-            }
+            start = curPage - iLeft;
+            finish = pageQuantity - 1;
         }
+    }
+
+    for (i = start; i < finish; i++)
+    {
+        var $element = $('<li ' + (i == curPage ? 'class="active"' : 'class="waves-effect"') + '>' + (i + 1) + '</a></li>');
+        $pagination.append($element);
+        $element.click(function (page) {
+            return function () {
+                callback(page);
+            };
+        }(i));
     }
 
     $pagination.append($finishElement);
