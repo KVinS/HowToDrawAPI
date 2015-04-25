@@ -174,10 +174,10 @@ function SuperPaint() {
         var paint;
 
         this.mousedown = function(e) {
+            var offset = $layer.offset();
+            this.offsetLeft = offset.left;
+            this.offsetTop = offset.top;
             if (mode == "normal") {
-                var offset = $layer.offset();
-                this.offsetLeft = offset.left;
-                this.offsetTop = offset.top;
                 paint = true;
                 addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
                 redraw();
@@ -216,8 +216,6 @@ function SuperPaint() {
         }
 
         function redraw(){
-//            context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
-
             context.lineJoin = "round";
             context.lineWidth = 25;
 
