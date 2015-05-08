@@ -5,6 +5,7 @@
  */
 package ru.kvins.draw;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +31,8 @@ public class Utilites {
             } else {
                 is = new FileInputStream(img);
             }
+
+            response.setIntHeader("Content-Length", is.available());
             response.setContentType("image/png");
             org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
 

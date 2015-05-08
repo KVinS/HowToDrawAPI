@@ -172,9 +172,8 @@ var query = function () {
         clone.removeAttr("id");
         clone = clone.children(0);
 
-        var title = data.titleEn;
+        var title = data.title;
         var coverUri = "/HowToDraw/API/lesson_prev/" + data.id;
-        var description = data.titleEn;
         var complexity = data.complexity;
 
         var overflowTitle = clone.find(".lesson-title")[0];
