@@ -17,7 +17,7 @@ For usage and examples: colpick.com/plugin
 				onChange: function () {},
 				onSubmit: function () {},
 				colorScheme: 'light',
-				color: '3289c7',
+				color: 'ff8800',
 				livePreview: true,
 				flat: false,
 				layout: 'full',

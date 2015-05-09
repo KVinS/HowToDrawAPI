@@ -115,7 +115,7 @@
             .outer {
                 height: 1000px;
                 width: 100%;
-                border: 1px solid red;
+                border: 1px solid #4d7198;
                 overflow: hidden;
                 position: relative;
             }
@@ -149,6 +149,7 @@
                 height:30px;
                 margin:5px;
                 border: 1px solid white;
+                display: inline-block;
             }
 
             .colpick {
@@ -161,33 +162,32 @@
 
 
             <div class="col s12 m12 l12">
-
-                <div class="row">
-                    <div class="col s12 m12 l12">
-                        <div class="waves-effect waves-light btn" id="back">Back</div>
-                        <div class="waves-effect waves-light btn" id="forward">Forward</div>
-                        <div class="waves-effect waves-light btn grey" id="flood">Flood</div>
-                        <div class="color-box"></div>
-
-                        <input id="layer_name" type="text"/>
-                        <div class="waves-effect waves-light btn" id="create_layer">Create layer</div>
-                        <div class="waves-effect waves-light btn" id="remove_layer">Remove layer</div>
-                        <select id="layers_select"></select>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col s12 m12 l12">
                         <div class="outer">
                             <div class="inner">
                                 <img id="lessonImage" src="">
                             </div>
-                            <div id="paint">
+                            <div id="paint" >
                             </div>
                         </div>
 
                     </div>
                 </div>
-
+                <div class="row">
+                    <div class="col s12 m12 l12">
+                        <div class="waves-effect waves-light btn" id="back" title="Предыдущий шаг"><</div>
+                        <div class="waves-effect waves-light btn grey" id="flood" title="Заливка замкнутой области изображения">Заливка</div>
+                        
+                        <div class="color-box" title="Выбрать цвет"></div>
+                        
+                        <div class="waves-effect waves-light btn" id="forward" title="Следующий шаг">></div>
+                        <input id="layer_name" type="text"/>
+                        <div class="waves-effect waves-light btn" id="create_layer" title="Создать слой">Create layer</div>
+                        <div class="waves-effect waves-light btn" id="remove_layer" title="Удалить слой">Remove layer</div>
+                        <select id="layers_select"></select>
+                    </div>
+                </div>
             </div>
 
         </div>

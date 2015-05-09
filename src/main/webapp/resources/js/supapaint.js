@@ -14,7 +14,7 @@ function SuperPaint() {
     var mode = "normal";
     var color = "#000000";
 
-    this.init = function(_container, _layersSelect) {
+    this.init = function (_container, _layersSelect) {
         $container = $(_container);
         $layersSelect = $(_layersSelect);
         width = $container.width();
@@ -24,8 +24,8 @@ function SuperPaint() {
         var __events = ['mousedown', 'mousemove', 'mouseup', 'mouseleave'];
         for (var i = 0; i < __events.length; i++) {
             var event = __events[i];
-            $container.on(event, function(eventName) {
-                return function(e) {
+            $container.on(event, function (eventName) {
+                return function (e) {
                     for (var j = 0; j < layers.length; j++) {
                         var layer = layers[j];
                         if (layer.isEnabled()) {
@@ -36,19 +36,20 @@ function SuperPaint() {
             }(event));
         }
         $layersSelect.material_select();
-        $layersSelect.on('change', function() {
+        $layersSelect.on('change', function () {
+            selectLayer(this.value);
         });
     };
 
-    this.toggleFlood = function() {
+    this.toggleFlood = function () {
         mode = (mode == "normal" ? "flood" : "normal");
     };
 
-    this.setColor = function(hex) {
+    this.setColor = function (hex) {
         color = "#" + hex;
     };
 
-    this.addLayer = function(name) {
+    this.addLayer = function (name) {
         var layer = createLayer(name).initLayer();
 
         var $option = $("<option value='" + name + "'>" + name + "</option>");
@@ -58,7 +59,7 @@ function SuperPaint() {
         $layersSelect.material_select_update();
     };
 
-    this.removeLayer = function(name) {
+    this.removeLayer = function (name) {
         for (var i = 0; i < layers.length; i++) {
             var layer = layers[i];
             if (layer.name() == name) {
@@ -124,43 +125,43 @@ function SuperPaint() {
         var $layer = $("<canvas id='layer_" + id + "' width='" + width + "' height='" + height + "'>");
         canvas = $layer[0];
 
-        if(typeof G_vmlCanvasManager != 'undefined') {
+        if (typeof G_vmlCanvasManager != 'undefined') {
             canvas = G_vmlCanvasManager.initElement(canvas);
         }
         context = canvas.getContext("2d");
 
-        this.clear = function() {
+        this.clear = function () {
 
         };
 
-        this.name = function() {
+        this.name = function () {
             return name;
         };
 
-        this.initLayer = function() {
+        this.initLayer = function () {
             var offset = $layer.offset();
             this.offsetLeft = offset.left;
             this.offsetTop = offset.top;
             return _this;
         };
 
-        this.isEnabled = function() {
+        this.isEnabled = function () {
             return enabled;
         };
 
-        this.remove = function() {
+        this.remove = function () {
             $layer.remove();
         };
 
-        this.setEnabled = function(_enabled) {
+        this.setEnabled = function (_enabled) {
             enabled = _enabled;
         };
 
-        this.getCanvas = function() {
+        this.getCanvas = function () {
             return $layer;
         };
 
-        this.getContext = function() {
+        this.getContext = function () {
             return context;
         };
 
@@ -173,10 +174,11 @@ function SuperPaint() {
         var clickDrag = [];
         var paint;
 
-        this.mousedown = function(e) {
+        this.mousedown = function (e) {
             var offset = $layer.offset();
             this.offsetLeft = offset.left;
             this.offsetTop = offset.top;
+            
             if (mode == "normal") {
                 paint = true;
                 addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
@@ -190,21 +192,21 @@ function SuperPaint() {
             }
         };
 
-        this.mousemove = function(e) {
+        this.mousemove = function (e) {
             var offset = $layer.offset();
             this.offsetLeft = offset.left;
             this.offsetTop = offset.top;
-            if(paint){
+            if (paint) {
                 addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
                 redraw();
             }
         };
 
-        this.mouseup = function(e){
+        this.mouseup = function (e) {
             paint = false;
         };
 
-        this.mouseleave = function(e){
+        this.mouseleave = function (e) {
             paint = false;
         };
 
@@ -215,16 +217,16 @@ function SuperPaint() {
             clickDrag.push(dragging);
         }
 
-        function redraw(){
+        function redraw() {
             context.lineJoin = "round";
             context.lineWidth = 25;
 
-            for(var i=0; i < clickX.length; i++) {
+            for (var i = 0; i < clickX.length; i++) {
                 context.beginPath();
-                if(clickDrag[i] && i){
-                    context.moveTo(clickX[i-1], clickY[i-1]);
-                }else{
-                    context.moveTo(clickX[i]-1, clickY[i]);
+                if (clickDrag[i] && i) {
+                    context.moveTo(clickX[i - 1], clickY[i - 1]);
+                } else {
+                    context.moveTo(clickX[i] - 1, clickY[i]);
                 }
                 context.lineTo(clickX[i], clickY[i]);
                 context.closePath();
@@ -252,15 +254,17 @@ function SuperPaint() {
     }
 
     function fill(startX, startY, canvas, context) {
-
         var pixelStack = [[startX, startY]];
         var canvasHeight = canvas.height;
         var canvasWidth = canvas.width;
         var colorLayer = context.getImageData(0, 0, canvasWidth, canvasHeight);
 
-        pixelPos = (startY * canvasWidth + startX) * 4;
+        pixelPos = Math.floor((startY * canvasWidth + startX) * 4);
 
+
+        alert("Start2 "+ pixelPos+ " " + colorLayer.data.length);
         var startR = colorLayer.data[pixelPos];
+        alert(startR);
         var startG = colorLayer.data[pixelPos + 1];
         var startB = colorLayer.data[pixelPos + 2];
 
@@ -270,6 +274,7 @@ function SuperPaint() {
         var fillColorG = c.g;
         var fillColorB = c.b;
 
+        alert(fillColorR + " "+ fillColorG+ " "+fillColorB);
         if (fillColorR == startR && fillColorG == startG && fillColorB == startB) {
             return;
         }
@@ -277,77 +282,81 @@ function SuperPaint() {
         var drawingBoundTop = 0;
 
 
-        while(pixelStack.length)
+        while (pixelStack.length)
         {
             var newPos, x, y, pixelPos, reachLeft, reachRight;
             newPos = pixelStack.pop();
             x = newPos[0];
             y = newPos[1];
 
-            pixelPos = (y*canvasWidth + x) * 4;
-            while(y-- >= drawingBoundTop && matchStartColor(pixelPos))
+            pixelPos = Math.floor((y * canvasWidth + x) * 4);
+            while (y-- >= drawingBoundTop && matchStartColor(pixelPos))
             {
-                pixelPos -= canvasWidth * 4;
+                pixelPos -= Math.floor(canvasWidth * 4);
             }
-            pixelPos += canvasWidth * 4;
+            pixelPos += Math.floor(canvasWidth * 4);
             ++y;
             reachLeft = false;
             reachRight = false;
-            while(y++ < canvasHeight-1 && matchStartColor(pixelPos))
+            while (y++ < canvasHeight - 1 && matchStartColor(pixelPos))
             {
                 colorPixel(pixelPos);
 
-                if(x > 0)
+                if (x > 0)
                 {
-                    if(matchStartColor(pixelPos - 4))
+                    if (matchStartColor(pixelPos - 4))
                     {
-                        if(!reachLeft){
+                        if (!reachLeft) {
                             pixelStack.push([x - 1, y]);
                             reachLeft = true;
                         }
                     }
-                    else if(reachLeft)
+                    else if (reachLeft)
                     {
                         reachLeft = false;
                     }
                 }
 
-                if(x < canvasWidth-1)
+                if (x < canvasWidth - 1)
                 {
-                    if(matchStartColor(pixelPos + 4))
+                    if (matchStartColor(pixelPos + 4))
                     {
-                        if(!reachRight)
+                        if (!reachRight)
                         {
                             pixelStack.push([x + 1, y]);
                             reachRight = true;
                         }
                     }
-                    else if(reachRight)
+                    else if (reachRight)
                     {
                         reachRight = false;
                     }
                 }
 
-                pixelPos += canvasWidth * 4;
+                pixelPos += Math.floor(canvasWidth * 4);
             }
         }
         context.putImageData(colorLayer, 0, 0);
 
         function matchStartColor(pixelPos)
         {
+            pixelPos = Math.floor(pixelPos);
+            //alert("Start "+pixelPos + " iz "+colorLayer.data.length);
             var r = colorLayer.data[pixelPos];
-            var g = colorLayer.data[pixelPos+1];
-            var b = colorLayer.data[pixelPos+2];
+            //alert(r);
+            var g = colorLayer.data[pixelPos + 1];
+            var b = colorLayer.data[pixelPos + 2];
 
             return (r == startR && g == startG && b == startB);
         }
 
         function colorPixel(pixelPos)
         {
+            pixelPos = Math.floor(pixelPos);
             colorLayer.data[pixelPos] = fillColorR;
-            colorLayer.data[pixelPos+1] = fillColorG;
-            colorLayer.data[pixelPos+2] = fillColorB;
-            colorLayer.data[pixelPos+3] = 255;
+            colorLayer.data[pixelPos + 1] = fillColorG;
+            colorLayer.data[pixelPos + 2] = fillColorB;
+            colorLayer.data[pixelPos + 3] = 255;
         }
     }
 
