@@ -13,7 +13,7 @@
         <title>Draw</title>
         <link href="${pageContext.request.contextPath}/resources/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
         <link href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css" rel="stylesheet" media="screen,projection">
-        <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.3.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/mocklessons.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/loader.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/errorhandler.js"></script>
@@ -297,6 +297,5 @@
             </div>
 
         </div>
-
     </body>
 </html>

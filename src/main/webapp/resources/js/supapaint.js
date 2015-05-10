@@ -4,7 +4,6 @@
 
 
 function SuperPaint() {
-
     var $container = null;
     var $layersSelect = null;
     var layers = [];
@@ -13,12 +12,18 @@ function SuperPaint() {
     var height = 0;
     var mode = "normal";
     var color = "#000000";
+    var colorA = {r: 0, g: 0, b: 0, a: 0};
 
+
+    
+    var currentLayer;
+    
     this.init = function (_container, _layersSelect) {
         $container = $(_container);
         $layersSelect = $(_layersSelect);
         width = $container.width();
         height = $container.height();
+        
         this.addLayer("Главный слой");
 
         var __events = ['mousedown', 'mousemove', 'mouseup', 'mouseleave'];
@@ -40,23 +45,32 @@ function SuperPaint() {
             selectLayer(this.value);
         });
     };
-
-    this.toggleFlood = function () {
-        mode = (mode == "normal" ? "flood" : "normal");
+    
+    this.toggleMod = function (mod) {
+        mode = (mode != mod ? mod : "normal");
     };
+    
+    this.getMod = function() {
+        return mode;
+    }
 
-    this.setColor = function (hex) {
+    this.setColor = function (hex, rgba) {
         color = "#" + hex;
+        colorA = rgba;
     };
 
     this.addLayer = function (name) {
         var layer = createLayer(name).initLayer();
-
+        
         var $option = $("<option value='" + name + "'>" + name + "</option>");
 
         $layersSelect.append($option);
         selectLayer(name);
         $layersSelect.material_select_update();
+    };
+
+    this.cleareLayer = function () {
+        currentLayer.clear();
     };
 
     this.removeLayer = function (name) {
@@ -82,6 +96,7 @@ function SuperPaint() {
             var layer = layers[i];
             if (layer.name() == name) {
                 layer.setEnabled(true);
+                currentLayer = layer;
             } else {
                 layer.setEnabled(false);
             }
@@ -95,6 +110,7 @@ function SuperPaint() {
             layer.setEnabled(false);
         }
         layers[num].setEnabled(true);
+        currentLayer = layers[num];
         $layersSelect.val(layers[num].name());
     }
 
@@ -131,7 +147,8 @@ function SuperPaint() {
         context = canvas.getContext("2d");
 
         this.clear = function () {
-
+        context.closePath();
+        context.clearRect(0,0,width,height);
         };
 
         this.name = function () {
@@ -178,8 +195,8 @@ function SuperPaint() {
             var offset = $layer.offset();
             this.offsetLeft = offset.left;
             this.offsetTop = offset.top;
-            
-            if (mode == "normal") {
+
+            if (mode == "normal" || mode == "erase") {
                 paint = true;
                 addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
                 redraw();
@@ -188,7 +205,9 @@ function SuperPaint() {
                 clickY = [];
                 clickColor = [];
                 clickDrag = [];
-                fill(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, canvas, context);
+               
+                var cff = new CanvasFloodFiller();
+                cff.floodFill(context, Math.floor(e.pageX - this.offsetLeft), Math.floor(e.pageY - this.offsetTop), colorA);
             }
         };
 
@@ -213,13 +232,15 @@ function SuperPaint() {
         function addClick(x, y, dragging) {
             clickX.push(x);
             clickY.push(y);
-            clickColor.push(color);
+            
+            
+            clickColor.push(colorA);
             clickDrag.push(dragging);
         }
 
         function redraw() {
             context.lineJoin = "round";
-            context.lineWidth = 25;
+            context.lineWidth = 15;
 
             for (var i = 0; i < clickX.length; i++) {
                 context.beginPath();
@@ -230,7 +251,8 @@ function SuperPaint() {
                 }
                 context.lineTo(clickX[i], clickY[i]);
                 context.closePath();
-                context.strokeStyle = clickColor[i];
+                context.strokeStyle = 'rgba('+clickColor[i].r+', '+clickColor[i].g+', '+clickColor[i].b+', '+(clickColor[i].a/255)+')';
+                context.fillStyle = 'rgba('+clickColor[i].r+', '+clickColor[i].g+', '+clickColor[i].b+', '+(clickColor[i].a/255)+')';
                 context.stroke();
             }
             if (!clickDrag[clickX.length - 1]) {
@@ -253,110 +275,242 @@ function SuperPaint() {
         array.splice(0, array.length - 2);
     }
 
-    function fill(startX, startY, canvas, context) {
-        var pixelStack = [[startX, startY]];
-        var canvasHeight = canvas.height;
-        var canvasWidth = canvas.width;
-        var colorLayer = context.getImageData(0, 0, canvasWidth, canvasHeight);
+    function CanvasFloodFiller()
+    {
+        // Ширина и высота канвы
+        var _cWidth = -1;
+        var _cHeight = -1;
 
-        pixelPos = Math.floor((startY * canvasWidth + startX) * 4);
+        // Заменяемый цвет
+        var _rR = 0;
+        var _rG = 0;
+        var _rB = 0;
+        var _rA = 0;
 
+        // Цвет закраски
+        var _nR = 0;
+        var _nG = 0;
+        var _nB = 0;
+        var _nA = 0;
 
-        alert("Start2 "+ pixelPos+ " " + colorLayer.data.length);
-        var startR = colorLayer.data[pixelPos];
-        alert(startR);
-        var startG = colorLayer.data[pixelPos + 1];
-        var startB = colorLayer.data[pixelPos + 2];
+        var _data = null;
 
-        var c = hexToRgb(color);
+        /*
+         * Получить точку из данных
+         **/
+        var getDot = function (x, y)
+        {
+            // Точка: y * ширину_канвы * 4 + (x * 4)
+            var dstart = (y * _cWidth * 4) + (x * 4);
+            var dr = _data[dstart];
+            var dg = _data[dstart + 1];
+            var db = _data[dstart + 2];
+            var da = _data[dstart + 3];
 
-        var fillColorR = c.r;
-        var fillColorG = c.g;
-        var fillColorB = c.b;
-
-        alert(fillColorR + " "+ fillColorG+ " "+fillColorB);
-        if (fillColorR == startR && fillColorG == startG && fillColorB == startB) {
-            return;
+            return {r: dr, g: dg, b: db, a: da};
         }
 
-        var drawingBoundTop = 0;
-
-
-        while (pixelStack.length)
+        /*
+         * Пиксель по координатам x,y - готовый к заливке?
+         **/
+        var tolerance = 25;
+        var isNeededPixel = function (x, y, tol)
         {
-            var newPos, x, y, pixelPos, reachLeft, reachRight;
-            newPos = pixelStack.pop();
-            x = newPos[0];
-            y = newPos[1];
+            var dstart = Math.floor((y * _cWidth * 4) + (x * 4));
+            var dr = _data[dstart];
+            var dg = _data[dstart + 1];
+            var db = _data[dstart + 2];
+            var da = _data[dstart + 3];
 
-            pixelPos = Math.floor((y * canvasWidth + x) * 4);
-            while (y-- >= drawingBoundTop && matchStartColor(pixelPos))
+            
+
+       
+           return (
+             Math.abs(_rA - da) <= (255 - tolerance) &&
+             Math.abs(_rR - dr) <= tolerance &&
+             Math.abs(_rG - dg) <= tolerance &&
+             Math.abs(_rB - db) <= tolerance
+             );
+        }
+
+        /*
+         * Найти левый пиксель, по пути закрашивая все попавшиеся
+         **/
+        var findLeftPixel = function (x, y)
+        {
+            // Крутим пикселы влево, заодно красим. Возвращаем левую границу.
+            // Во избежание дубляжа и ошибок, findLeftPixel НЕ красит текущий
+            // пиксел! Это сделает обязательный поиск вправо.
+            var lx = x - 1;
+            var dCoord = (y * _cWidth * 4) + (lx * 4);
+
+
+            while (lx >= 0 && isNeededPixel(lx,y))
             {
-                pixelPos -= Math.floor(canvasWidth * 4);
+                _data[dCoord] = _nR;
+                _data[dCoord + 1] = _nG;
+                _data[dCoord + 2] = _nB;
+                _data[dCoord + 3] = _nA;
+
+                lx--;
+                dCoord -= 4;
             }
-            pixelPos += Math.floor(canvasWidth * 4);
-            ++y;
-            reachLeft = false;
-            reachRight = false;
-            while (y++ < canvasHeight - 1 && matchStartColor(pixelPos))
+
+            return lx + 1;
+        }
+
+        /*
+         * Найти правый пиксель, по пути закрашивая все попавшиеся
+         **/
+        var findRightPixel = function (x, y)
+        {
+            var rx = x;
+            var dCoord = (y * _cWidth * 4) + (x * 4);
+
+            while (rx < _cWidth && isNeededPixel(rx,y))
             {
-                colorPixel(pixelPos);
+                _data[dCoord] = _nR;
+                _data[dCoord + 1] = _nG;
+                _data[dCoord + 2] = _nB;
+                _data[dCoord + 3] = _nA;
 
-                if (x > 0)
-                {
-                    if (matchStartColor(pixelPos - 4))
-                    {
-                        if (!reachLeft) {
-                            pixelStack.push([x - 1, y]);
-                            reachLeft = true;
-                        }
-                    }
-                    else if (reachLeft)
-                    {
-                        reachLeft = false;
-                    }
-                }
+                rx++;
+                dCoord += 4;
+            }
 
-                if (x < canvasWidth - 1)
+            return rx - 1;
+        }
+
+        /*
+         * Эффективная (строчная) заливка
+         **/
+        var effectiveFill = function (cx, cy)
+        {
+            var lineQueue = new Array();
+
+            var fx1 = findLeftPixel(cx, cy);
+            var fx2 = findRightPixel(cx, cy);
+
+            lineQueue.push({x1: fx1, x2: fx2, y: cy});
+
+            while (lineQueue.length > 0)
+            {
+                var cLine = lineQueue.shift();
+                var nx1 = cLine.x1;
+                var nx2 = cLine.x1;
+                var currx = nx2;
+
+                // Сперва для первого пиксела, если верхний над ним цвет подходит,
+                // пускаем поиск левой границы.
+                // Можно искать вверх?
+                if (cLine.y > 0)
                 {
-                    if (matchStartColor(pixelPos + 4))
+                    // Сверху строка может идти левее текущей?
+                    if (isNeededPixel(cLine.x1, cLine.y - 1))
                     {
-                        if (!reachRight)
+
+                        // Ищем в том числе влево
+                        nx1 = findLeftPixel(cLine.x1, cLine.y - 1);
+                        nx2 = findRightPixel(cLine.x1, cLine.y - 1);
+                        lineQueue.push({x1: nx1, x2: nx2, y: cLine.y - 1});
+                    }
+
+                    currx = nx2;
+                    // Добираем недостающее, ищем только вправо, но пока не
+                    // доползли так или иначе далее края текущей строки
+                    while (cLine.x2 >= nx2 && currx <= cLine.x2 && currx < (_cWidth - 1))
+                    {
+                        currx++;
+                        if (isNeededPixel(currx, cLine.y - 1))
                         {
-                            pixelStack.push([x + 1, y]);
-                            reachRight = true;
+                            // Сохраняем найденный отрезок
+                            nx1 = currx;
+                            nx2 = findRightPixel(currx, cLine.y - 1);
+                            lineQueue.push({x1: nx1, x2: nx2, y: cLine.y - 1});
+                            // Прыгаем далее найденного
+
+                            currx = nx2;
                         }
-                    }
-                    else if (reachRight)
-                    {
-                        reachRight = false;
                     }
                 }
 
-                pixelPos += Math.floor(canvasWidth * 4);
-            }
+                nx1 = cLine.x1;
+                nx2 = cLine.x1;
+                // Те же яйца, но можно ли искать вниз?
+                if (cLine.y < (_cHeight - 1))
+                {
+                    // Снизу строка может идти левее текущей?
+                    if (isNeededPixel(cLine.x1, cLine.y + 1))
+                    {
+                        // Ищем в том числе влево
+                        nx1 = findLeftPixel(cLine.x1, cLine.y + 1);
+                        nx2 = findRightPixel(cLine.x1, cLine.y + 1);
+                        lineQueue.push({x1: nx1, x2: nx2, y: cLine.y + 1});
+                    }
+
+                    currx = nx2;
+                    // Добираем недостающее, ищем только вправо, но пока не
+                    // доползли так или иначе далее края текущей строки
+                    while (cLine.x2 >= nx2 && currx <= cLine.x2 && currx < (_cWidth - 1))
+                    {
+                        currx++;
+                        if (isNeededPixel(currx, cLine.y + 1))
+                        {
+                            // Сохраняем найденный отрезок
+                            nx1 = currx;
+                            nx2 = findRightPixel(currx, cLine.y + 1);
+                            lineQueue.push({x1: nx1, x2: nx2, y: cLine.y + 1});
+                            // Прыгаем далее найденного
+
+                            currx = nx2;
+
+                        }
+                    }
+                }
+
+            }   // while (main loop)
         }
-        context.putImageData(colorLayer, 0, 0);
 
-        function matchStartColor(pixelPos)
+        /*
+         * void floodFill(CanvasContext2D canvasContext, int x, int y)
+         * Выполняет заливку на канве
+         * canvasContext - контекст
+         * int x, y - координаты точки заливки
+         * color - цвет заливки
+         */
+        this.floodFill = function (canvasContext, x, y, color)
         {
-            pixelPos = Math.floor(pixelPos);
-            //alert("Start "+pixelPos + " iz "+colorLayer.data.length);
-            var r = colorLayer.data[pixelPos];
-            //alert(r);
-            var g = colorLayer.data[pixelPos + 1];
-            var b = colorLayer.data[pixelPos + 2];
+            _cWidth = canvasContext.canvas.width;
+            _cHeight = canvasContext.canvas.height;
 
-            return (r == startR && g == startG && b == startB);
-        }
+            _nR = color.r;
+            _nG = color.g;
+            _nB = color.b;
+            _nA = color.a;
 
-        function colorPixel(pixelPos)
-        {
-            pixelPos = Math.floor(pixelPos);
-            colorLayer.data[pixelPos] = fillColorR;
-            colorLayer.data[pixelPos + 1] = fillColorG;
-            colorLayer.data[pixelPos + 2] = fillColorB;
-            colorLayer.data[pixelPos + 3] = 255;
+            var idata = canvasContext.getImageData(0, 0, _cWidth, _cHeight);
+            var pixels = idata.data;
+            _data = pixels;
+
+            var toReplace = getDot(x, y);
+            _rR = toReplace.r;
+            _rG = toReplace.g;
+            _rB = toReplace.b;
+            _rA = toReplace.a;
+
+            // Всё зависнет к известной матери если цвета совпадают
+            
+            if ((
+             Math.abs(_rA - _nA) <= (255 - tolerance) &&
+             Math.abs(_rR - _nR) <= tolerance &&
+             Math.abs(_rG - _nG) <= tolerance &&
+             Math.abs(_rB - _nB) <= tolerance
+             ))
+                return;
+
+            effectiveFill(x, y);
+
+            canvasContext.putImageData(idata, 0, 0);
         }
     }
 
@@ -364,6 +518,8 @@ function SuperPaint() {
 
 function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    
+    
     return result ? {
         r: parseInt(result[1], 16),
         g: parseInt(result[2], 16),
