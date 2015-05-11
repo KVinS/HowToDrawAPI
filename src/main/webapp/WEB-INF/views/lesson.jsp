@@ -93,14 +93,14 @@
                     paint.cleareLayer();
                 });
                 function updateMod(mod) {
-                    $("#flood").removeClass("green").addClass("grey");
-                    $("#erase").removeClass("green").addClass("grey");
+                    $("#flood").removeClass("vk-toggle").addClass("grey");
+                    $("#erase").removeClass("vk-toggle").addClass("grey");
                     switch (mod) {
                         case 'erase':
-                            $("#erase").addClass("green").removeClass("grey");
+                            $("#erase").addClass("vk-toggle").removeClass("grey");
                             break
                         case 'flood':
-                            $("#flood").addClass("green").removeClass("grey");
+                            $("#flood").addClass("vk-toggle").removeClass("grey");
                             break;
                     }
                 }
@@ -206,17 +206,17 @@
                 </div>
                 <div class="row">
                     <div class="col s12 m12 l12">
-                        <div class="waves-effect waves-light btn" id="back" title="Предыдущий шаг"><</div>
+                        <div class="waves-effect waves-light btn vk" id="back" title="Предыдущий шаг"><</div>
                         <div class="waves-effect waves-light btn grey" id="flood" title="Заливка замкнутой области изображения">Заливка</div>
                         <div class="waves-effect waves-light btn grey" id="erase" title="Режим удаления фрагмента">Ластик</div>
 
                         <div class="waves-effect waves-light btn color-box" title="Выбрать цвет">Цвет</div>
 
-                        <div class="waves-effect waves-light btn" id="forward" title="Следующий шаг">></div>
+                        <div class="waves-effect waves-light btn vk" id="forward" title="Следующий шаг">></div>
                         <input id="layer_name" type="text"/>
-                        <div class="waves-effect waves-light btn" id="create_layer" title="Создать слой">Create layer</div>
-                        <div class="waves-effect waves-light btn" id="remove_layer" title="Удалить слой">Remove layer</div>
-                        <div class="waves-effect waves-light btn" id="clear_layer" title="Удалить слой">Очистить</div>
+                        <div class="waves-effect waves-light btn vk" id="create_layer" title="Создать слой">Create layer</div>
+                        <div class="waves-effect waves-light btn vk" id="remove_layer" title="Удалить слой">Remove layer</div>
+                        <div class="waves-effect waves-light btn vk" id="clear_layer" title="Удалить слой">Очистить</div>
                         <select id="layers_select"></select>
                     </div>
                 </div>
