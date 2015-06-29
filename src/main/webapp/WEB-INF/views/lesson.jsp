@@ -28,17 +28,6 @@
     </head>
     <body>
 
-        <nav>
-            <div class="nav-wrapper">
-                <a href="#" class="brand-logo right"></a>
-                <ul id="nav-mobile" class="left hide-on-med-and-down">
-                    <li><a href="/HowToDraw/">Главная</a></li>
-                    <li><a href="components.html">Темы</a></li>
-                    <li><a href="javascript.html">Уроки</a></li>
-                </ul>
-            </div>
-        </nav>
-
         <script>
             VK.init(function () {
                 // API initialization succeeded 
@@ -145,11 +134,10 @@
 
         <style>
             .outer {
-                height: 1000px;
                 width: 100%;
-                border: 1px solid #4d7198;
                 overflow: hidden;
                 position: relative;
+                background: white;
                 top: -1px;
             }
             .inner {
@@ -185,12 +173,63 @@
                 z-index: 10000;
             }
 
+            @media screen and (max-device-height: 1200px) {
+                #workspace {
+                    height: 800px;
+                }
+            }
+
+            @media screen and (max-device-height: 1080px) {
+                #workspace {
+                    height: 720px;
+                }
+            }
+
+            @media screen and (max-device-height: 1024px) {
+                #workspace {
+                    height: 640px;
+                }
+            }
+
+            @media screen and (max-device-height: 1000px) {
+                #workspace {
+                    height: 722px;
+                }
+            }
+
+            @media screen and (max-device-height: 960px) {
+                #workspace {
+                    height: 682px;
+                }
+            }
+
+            @media screen and (max-device-height: 900px) {
+                #workspace {
+                    height: 622px;
+                }
+            }
+
+            @media screen and (max-device-height: 768px) {
+                #workspace {
+                    height: 490px;
+                }
+            }
+
+            @media screen and (max-device-height: 600px) {
+                #workspace {
+                    height: 322px;
+                }
+            }
+
+            @media screen and (max-device-height: 480px) {
+                #workspace {
+                    height: 222px;
+                }
+            }
         </style>
 
 
-        <div class="row">
-
-
+        <div class="row" id = "workspace">
             <div class="col s12 m12 l12">
                 <div class="row">
                     <div class="col s12 m12 l12">
@@ -212,7 +251,7 @@
 
                         <div class="waves-effect waves-light btn color-box" title="Выбрать цвет">Цвет</div>
 
-                        <div class="waves-effect waves-light btn vk" id="forward" title="Следующий шаг">></div>
+                        <div class="waves-effect waves-light btn vk" id="forward" title="Следующий шаг"></div>
                         <input id="layer_name" type="text"/>
                         <div class="waves-effect waves-light btn vk" id="create_layer" title="Создать слой">Create layer</div>
                         <div class="waves-effect waves-light btn vk" id="remove_layer" title="Удалить слой">Remove layer</div>

@@ -24,7 +24,7 @@
     </head>
     <body>
 
-        <nav>
+        <nav class="vk">
             <div class="nav-wrapper">
                 <a href="#" class="brand-logo right"></a>
                 <ul id="nav-mobile" class="left hide-on-med-and-down">
