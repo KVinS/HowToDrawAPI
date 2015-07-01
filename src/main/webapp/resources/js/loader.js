@@ -290,9 +290,15 @@ var loadLesson = function (img, lessonId, step) {
                 if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
                     alert('broken image!');
                 } else {
-                    console.log("good");
+                    console.log("good "+this.naturalWidth+"x"+ this.naturalHeight);
+                    if(this.naturalWidth > this.naturalHeight){
+                        $(img).css("width","100%");
+                        $(img).css("height", "");
+                    }else{
+                        $(img).css("width","");
+                        $(img).css("height","100%");
+                    }
                 }
             })
-
 };
 

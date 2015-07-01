@@ -162,7 +162,6 @@
                 display: block;
                 position: relative;
                 left: -50%;
-                height: 100%;
             }
 
             #paint {
