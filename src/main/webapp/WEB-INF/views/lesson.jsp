@@ -29,18 +29,30 @@
     <body>
 
         <script>
+            function onScrollTop(a, b, c,d){
+                console.log('СКРОЛЛ='+a+'>Высота ЭКРАНА='+b+'>ДО ИФРЕЙМА='+c+'>ХЗ='+d);
+                VK.callMethod("resizeWindow",1000,b-c);
+            }
+            function newSizeWindow() {
+                VK.callMethod('scrollTop');
+            }
+
             VK.init(function () {
-                // API initialization succeeded 
-                // Your code here 
+                // API initialization succeeded
+                // Your code here
+                VK.addCallback("onScrollTop",onScrollTop);
+                setInterval(newSizeWindow, 1000);
             }, function () {
                 // API initialization failed 
                 // Can reload page here 
             }, '5.29');
             var lessonId = ${lessonID};
             var curStep = ${stepNum};
-            function updateUrl() {
+            function updateStep() {
                 //Если поставить push state, то "Назад" будет переходить к предыдущему шагу.
                 //history.pushState(null, null, "/HowToDraw/#page=lesson&id=" + ${lessonID} + "&step=" + curStep);
+
+                $("#lessonTitle").html("Неизвестный урок. Шаг "+(curStep+1)+" из ХЗСКОЛЬКИ");
                 history.replaceState({}, '', "/HowToDraw/#page=lesson&id=" + ${lessonID} + "&step=" + curStep);
                 VK.callMethod("setLocation", "page=lesson&id=" + ${lessonID} + "&step=" + curStep, false);
             }
@@ -62,15 +74,15 @@
 
                 function nextStep() {
                     loadLesson($img, lessonId, ++curStep);
-                    updateUrl();
+                    updateStep();
                 }
 
                 function prewStep() {
                     loadLesson($img, lessonId, --curStep);
-                    updateUrl();
+                    updateStep();
                 }
 
-                updateUrl();
+                updateStep();
                 $.fn.material_select();
                 loadLesson($img, lessonId, curStep);
                 var paint = new SuperPaint();
@@ -119,9 +131,9 @@
                 }).css('background-color', '#ff8800');
 
                 $(document).keyup(function (event) {
-                    if (event.keyCode == 65) {
+                    if (event.keyCode == 65 || event.keyCode == 37) {
                         prewStep();
-                    } else if (event.keyCode == 68) {
+                    } else if (event.keyCode == 68 || event.keyCode == 39) {
                         nextStep();
                     }
                 });
@@ -165,71 +177,34 @@
                 top: 0;
             }
 
-            .color-box {
-                display: inline-block;
-            }
-
             .colpick {
                 z-index: 10000;
-            }
-
-            @media screen and (max-device-height: 1200px) {
-                #workspace {
-                    height: 800px;
-                }
-            }
-
-            @media screen and (max-device-height: 1080px) {
-                #workspace {
-                    height: 720px;
-                }
-            }
-
-            @media screen and (max-device-height: 1024px) {
-                #workspace {
-                    height: 640px;
-                }
-            }
-
-            @media screen and (max-device-height: 1000px) {
-                #workspace {
-                    height: 722px;
-                }
-            }
-
-            @media screen and (max-device-height: 960px) {
-                #workspace {
-                    height: 682px;
-                }
-            }
-
-            @media screen and (max-device-height: 900px) {
-                #workspace {
-                    height: 622px;
-                }
-            }
-
-            @media screen and (max-device-height: 768px) {
-                #workspace {
-                    height: 490px;
-                }
-            }
-
-            @media screen and (max-device-height: 600px) {
-                #workspace {
-                    height: 322px;
-                }
-            }
-
-            @media screen and (max-device-height: 480px) {
-                #workspace {
-                    height: 222px;
-                }
             }
         </style>
 
 
-        <div class="row" id = "workspace">
+        <div class="row">
+            <div class="row col s2 m2 l2" id = "menu">
+                <ul class="collection">
+                    <li class="collection-item">Меню</li>
+                    <a href="/HowToDraw/" class="menu-item waves-effect waves-light btn vk">Назад</a>
+                    <a href="#!" class="menu-item waves-effect waves-light btn vk">Сохранить</a>
+                    <li class="collection-item">Инструменты</li>
+                    <a href="#!" class="menu-item waves-effect waves-light btn grey">Карандаш</a>
+                    <a href="#!" class="menu-item waves-effect waves-light btn vk-toggle">Кисть</a>
+                    <a href="#!" class="menu-item waves-effect waves-light btn grey" id="flood" title="Заливка замкнутой области изображения">Заливка</a>
+                    <a href="#!" class="menu-item waves-effect waves-light btn grey" id="erase" title="Режим удаления фрагмента">Ластик</a>
+                    <a href="#!" class="menu-item waves-effect waves-light btn color-box">Цвет</a>
+                    <li class="collection-item">Слой</li>
+                    <input id="layer_name" class="hidden menu-item" type="text"/>
+                    <select id="layers_select" class="browser-default menu-item waves-effect waves-light btn vk"></select>
+                    <a href="#!" class="hidden menu-item waves-effect waves-light btn vk" id="create_layer" title="Создать слой">Создать</a>
+                    <a href="#!" class="hidden menu-item waves-effect waves-light btn vk" id="remove_layer" title="Удалить слой">Удалить</a>
+                    <a href="#!" class="menu-item waves-effect waves-light btn vk" id="clear_layer" title="Очистить слой">Очистить</a>
+                </ul>
+            </div>
+
+            <div class="row col s10 m10 l10" id = "workspace">
             <div class="col s12 m12 l12">
                 <div class="row">
                     <div class="col s12 m12 l12">
@@ -240,27 +215,19 @@
                             <div id="paint" >
                             </div>
                         </div>
-
+                        <div class="row" style="position: relative; top: -36px;">
+                            <div class="waves-effect waves-light btn vk col s2 m2 l2" id="back" title="Предыдущий шаг"><</div>
+                            <h6 class="col s8 m8 l8 center" id="lessonTitle"></h6>
+                            <div class="waves-effect waves-light btn vk col s2 m2 l2" id="forward" title="Следующий шаг">></div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12 m12 l12">
-                        <div class="waves-effect waves-light btn vk" id="back" title="Предыдущий шаг"><</div>
-                        <div class="waves-effect waves-light btn grey" id="flood" title="Заливка замкнутой области изображения">Заливка</div>
-                        <div class="waves-effect waves-light btn grey" id="erase" title="Режим удаления фрагмента">Ластик</div>
-
-                        <div class="waves-effect waves-light btn color-box" title="Выбрать цвет">Цвет</div>
-
-                        <div class="waves-effect waves-light btn vk" id="forward" title="Следующий шаг"></div>
-                        <input id="layer_name" type="text"/>
-                        <div class="waves-effect waves-light btn vk" id="create_layer" title="Создать слой">Create layer</div>
-                        <div class="waves-effect waves-light btn vk" id="remove_layer" title="Удалить слой">Remove layer</div>
-                        <div class="waves-effect waves-light btn vk" id="clear_layer" title="Удалить слой">Очистить</div>
-                        <select id="layers_select"></select>
                     </div>
                 </div>
             </div>
-
+        </div>
         </div>
 
     </body>

@@ -23,8 +23,13 @@ function SuperPaint() {
         $layersSelect = $(_layersSelect);
         width = $container.width();
         height = $container.height();
-        
-        this.addLayer("Главный слой");
+
+        this.addLayer("Слой -2");
+        this.addLayer("Слой -1");
+        this.addLayer("Слой 0");
+        this.addLayer("Слой 1");
+        this.addLayer("Слой 2");
+        selectLayerByNum(2);
 
         var __events = ['mousedown', 'mousemove', 'mouseup', 'mouseleave'];
         for (var i = 0; i < __events.length; i++) {

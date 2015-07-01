@@ -49,13 +49,23 @@
         </nav>
 
         <script>
+            function onScrollTop(a, b, c,d){
+                console.log('СКРОЛЛ='+a+'>Высота ЭКРАНА='+b+'>ДО ИФРЕЙМА='+c+'>ХЗ='+d);
+                VK.callMethod("resizeWindow",1000,b-c);
+            }
+            function newSizeWindow() {
+                VK.callMethod('scrollTop');
+            }
+
             VK.init(function () {
                 VK.addCallback('onLocationChanged', onLocationChanged);
-                // API initialization succeeded 
-                // Your code here 
+                // API initialization succeeded
+                // Your code here
+                VK.addCallback("onScrollTop",onScrollTop);
+                setInterval(newSizeWindow, 1000);
             }, function () {
-                // API initialization failed 
-                // Can reload page here 
+                // API initialization failed
+                // Can reload page here
             }, '5.29');
 
             function onLocationChanged(location) {
@@ -246,7 +256,7 @@
                         <a class="card-panel lighten-5 z-depth-1 waves-effect waves-grey lesson-link" lesson-link>
                             <div class="row valign-wrapper">
                                 <div class="col s3 l4 img-holder">
-                                    <img src="" alt="" class="circle responsive-img lesson-cover" lesson-cover> <!-- notice the "circle" class -->
+                                    <img src="" alt="" class=" responsive-img lesson-cover" lesson-cover> <!-- notice the "circle" class -->
                                 </div>
                                 <div class="col s9">
                                     <span class="black-text lesson-title" lesson-title><span class="paragraph-end"></span></span>
