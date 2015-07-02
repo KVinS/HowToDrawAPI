@@ -82,11 +82,20 @@
                     updateStep();
                 }
 
+                function updateSize(newSize){
+                    var percent = newSize/maxSize*100;
+                    $("#sizeBar").css("width", percent+"%");
+                    paint.setSize(newSize);
+                }
+
                 updateStep();
                 $.fn.material_select();
                 loadLesson($img, lessonId, curStep);
+
+                var maxSize = 150;
                 var paint = new SuperPaint();
                 paint.init($("#paint"), $("#layers_select"));
+                updateSize(10);
                 $("#create_layer").click(function () {
                     paint.addLayer($("#layer_name").val());
                 });
@@ -94,14 +103,24 @@
                     paint.cleareLayer();
                 });
                 function updateMod(mod) {
+
+
                     $("#flood").removeClass("vk-toggle").addClass("grey");
                     $("#erase").removeClass("vk-toggle").addClass("grey");
+                    $("#pencil").removeClass("vk-toggle").addClass("grey");
+                    $("#brush").removeClass("vk-toggle").addClass("grey");
                     switch (mod) {
                         case 'erase':
                             $("#erase").addClass("vk-toggle").removeClass("grey");
                             break
                         case 'flood':
                             $("#flood").addClass("vk-toggle").removeClass("grey");
+                            break;
+                        case 'pencil':
+                            $("#pencil").addClass("vk-toggle").removeClass("grey");
+                            break
+                        case 'brush':
+                            $("#brush").addClass("vk-toggle").removeClass("grey");
                             break;
                     }
                 }
@@ -114,6 +133,32 @@
                     paint.toggleMod("erase");
                     updateMod(paint.getMod());
                 });
+                $("#brush").click(function () {
+                    paint.toggleMod("brush");
+                    updateMod(paint.getMod());
+                });
+                $("#pencil").click(function () {
+                    paint.toggleMod("pencil");
+                    updateMod(paint.getMod());
+                });
+
+                $("#size").click(function (e) {
+                    var offset = $(this).offset();
+
+                    var xClick = e.pageX - offset.left;
+                    var width = $("#size").width();
+
+                    var percent = xClick/width*100;
+
+                    if(percent<=0){
+                        percent=1;
+                    }else if(percent > 100){
+                        percent=100;
+                    }
+                    var newSize = maxSize * (percent / 100);
+                    updateSize(newSize);
+                });
+
                 $("#remove_layer").click(function () {
                     paint.removeLayer($("#layer_name").val());
                 });
@@ -171,6 +216,7 @@
             }
 
             #paint canvas {
+                cursor: crosshair;
                 position: absolute;
                 left: 0;
                 top: 0;
@@ -189,17 +235,21 @@
                     <a href="/HowToDraw/" class="menu-item waves-effect waves-light btn vk">Назад</a>
                     <a href="#!" class="menu-item waves-effect waves-light btn vk">Сохранить</a>
                     <li class="collection-item">Инструменты</li>
-                    <a href="#!" class="menu-item waves-effect waves-light btn grey">Карандаш</a>
-                    <a href="#!" class="menu-item waves-effect waves-light btn vk-toggle">Кисть</a>
+                    <a href="#!" class="menu-item waves-effect waves-light btn grey" id="pencil">Карандаш</a>
+                    <a href="#!" class="menu-item waves-effect waves-light btn vk-toggle" id="brush">Кисть</a>
                     <a href="#!" class="menu-item waves-effect waves-light btn grey" id="flood" title="Заливка замкнутой области изображения">Заливка</a>
                     <a href="#!" class="menu-item waves-effect waves-light btn grey" id="erase" title="Режим удаления фрагмента">Ластик</a>
                     <a href="#!" class="menu-item waves-effect waves-light btn color-box">Цвет</a>
+                    <span class="menu-size waves-effect waves-light  grey" id="size" title="Размер кисти">
+                    <div style="display: block; position: fixed; width: 100%; height: 100%; padding: 10px 20px;" class="white-text">Размер</div>
+                        <div id ="sizeBar" style="width: 10%; height: 100%" class="vk"></div>
+                    </span>
                     <li class="collection-item">Слой</li>
                     <input id="layer_name" class="hidden menu-item" type="text"/>
                     <select id="layers_select" class="browser-default menu-item waves-effect waves-light btn vk"></select>
                     <a href="#!" class="hidden menu-item waves-effect waves-light btn vk" id="create_layer" title="Создать слой">Создать</a>
                     <a href="#!" class="hidden menu-item waves-effect waves-light btn vk" id="remove_layer" title="Удалить слой">Удалить</a>
-                    <a href="#!" class="menu-item waves-effect waves-light btn vk" id="clear_layer" title="Очистить слой">Очистить</a>
+                    <a href="#!" class="menu-item waves-effect waves-light vk" id="clear_layer" title="Очистить слой">Очистить</a>
                 </ul>
             </div>
 

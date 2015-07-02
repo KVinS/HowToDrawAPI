@@ -14,7 +14,8 @@ function SuperPaint() {
     var color = "#000000";
     var colorA = {r: 0, g: 0, b: 0, a: 0};
 
-
+    var type = "round"
+    var size = 15;
     
     var currentLayer;
     
@@ -60,9 +61,20 @@ function SuperPaint() {
     }
 
     this.setColor = function (hex, rgba) {
+        if(currentLayer!=undefined && currentLayer!=null) {
+            currentLayer.clearQueue();
+        }
         color = "#" + hex;
         colorA = rgba;
     };
+
+
+    this.setSize = function (newSize) {
+        if(currentLayer!=undefined && currentLayer!=null) {
+            currentLayer.clearQueue();
+        }
+        size = newSize;
+    }
 
     this.addLayer = function (name) {
         var layer = createLayer(name).initLayer();
@@ -101,6 +113,9 @@ function SuperPaint() {
             var layer = layers[i];
             if (layer.name() == name) {
                 layer.setEnabled(true);
+                if(currentLayer!=undefined && currentLayer!=null) {
+                    currentLayer.clearQueue();
+                }
                 currentLayer = layer;
             } else {
                 layer.setEnabled(false);
@@ -115,6 +130,9 @@ function SuperPaint() {
             layer.setEnabled(false);
         }
         layers[num].setEnabled(true);
+        if(currentLayer!=undefined && currentLayer!=null) {
+            currentLayer.clearQueue();
+        }
         currentLayer = layers[num];
         $layersSelect.val(layers[num].name());
     }
@@ -152,9 +170,18 @@ function SuperPaint() {
         context = canvas.getContext("2d");
 
         this.clear = function () {
-        context.closePath();
+            this.clearQueue();
         context.clearRect(0,0,width,height);
         };
+
+
+        this.clearQueue = function () {
+            context.closePath();
+            clickX.splice(0, clickX.length);
+            clickY.splice(0, clickY.length);
+            clickColor.splice(0, clickColor.length);
+            clickDrag.splice(0, clickDrag.length);
+        }
 
         this.name = function () {
             return name;
@@ -237,15 +264,13 @@ function SuperPaint() {
         function addClick(x, y, dragging) {
             clickX.push(x);
             clickY.push(y);
-            
-            
             clickColor.push(colorA);
             clickDrag.push(dragging);
         }
 
         function redraw() {
-            context.lineJoin = "round";
-            context.lineWidth = 15;
+            context.lineJoin = type;
+            context.lineWidth = size;
 
             for (var i = 0; i < clickX.length; i++) {
                 context.beginPath();
