@@ -103,7 +103,7 @@
                     paint.cleareLayer();
                 });
                 function updateMod(mod) {
-
+                    paint.toggleMod(mod);
 
                     $("#flood").removeClass("vk-toggle").addClass("grey");
                     $("#erase").removeClass("vk-toggle").addClass("grey");
@@ -126,20 +126,16 @@
                 }
 
                 $("#flood").click(function () {
-                    paint.toggleMod("flood");
-                    updateMod(paint.getMod());
+                    updateMod("flood");
                 });
                 $("#erase").click(function () {
-                    paint.toggleMod("erase");
-                    updateMod(paint.getMod());
+                    updateMod("erase");
                 });
                 $("#brush").click(function () {
-                    paint.toggleMod("brush");
-                    updateMod(paint.getMod());
+                    updateMod("brush");
                 });
                 $("#pencil").click(function () {
-                    paint.toggleMod("pencil");
-                    updateMod(paint.getMod());
+                    updateMod("pencil");
                 });
 
                 $("#size").click(function (e) {
@@ -231,10 +227,10 @@
         <div class="row">
             <div class="row col s2 m2 l2" id = "menu">
                 <ul class="collection">
-                    <li class="collection-item">Меню</li>
+                    <li class="collection-item no-select">Меню</li>
                     <a href="/HowToDraw/" class="menu-item waves-effect waves-light btn vk">Назад</a>
                     <a href="#!" class="menu-item waves-effect waves-light btn vk">Сохранить</a>
-                    <li class="collection-item">Инструменты</li>
+                    <li class="collection-item no-select">Инструменты</li>
                     <a href="#!" class="menu-item waves-effect waves-light btn grey" id="pencil">Карандаш</a>
                     <a href="#!" class="menu-item waves-effect waves-light btn vk-toggle" id="brush">Кисть</a>
                     <a href="#!" class="menu-item waves-effect waves-light btn grey" id="flood" title="Заливка замкнутой области изображения">Заливка</a>
@@ -244,7 +240,7 @@
                     <div style="display: block; position: fixed; width: 100%; height: 100%; padding: 10px 20px;" class="white-text">Размер</div>
                         <div id ="sizeBar" style="width: 10%; height: 100%" class="vk"></div>
                     </span>
-                    <li class="collection-item">Слой</li>
+                    <li class="collection-item no-select">Слой</li>
                     <input id="layer_name" class="hidden menu-item" type="text"/>
                     <select id="layers_select" class="browser-default menu-item waves-effect waves-light btn vk"></select>
                     <a href="#!" class="hidden menu-item waves-effect waves-light btn vk" id="create_layer" title="Создать слой">Создать</a>
@@ -266,7 +262,7 @@
                         </div>
                         <div class="row" style="position: relative; top: -36px;">
                             <div class="waves-effect waves-light btn vk col s2 m2 l2" id="back" title="Предыдущий шаг"><</div>
-                            <h6 class="col s8 m8 l8 center" id="lessonTitle"></h6>
+                            <h6 class="col s8 m8 l8 center no-select" id="lessonTitle"></h6>
                             <div class="waves-effect waves-light btn vk col s2 m2 l2" id="forward" title="Следующий шаг">></div>
                         </div>
                     </div>

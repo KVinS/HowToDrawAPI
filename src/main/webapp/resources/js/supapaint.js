@@ -14,7 +14,7 @@ function SuperPaint() {
     var color = "#000000";
     var colorA = {r: 0, g: 0, b: 0, a: 0};
 
-    var type = "round"
+    var type = "miter"
     var size = 15;
     
     var currentLayer;
@@ -53,7 +53,22 @@ function SuperPaint() {
     };
     
     this.toggleMod = function (mod) {
+        stopDrawing();
         mode = (mode != mod ? mod : "normal");
+        switch (mod){
+            case "pencil":
+                mode = "normal";
+                type = "round";
+                break;
+            case "brush":
+                mode = "normal";
+                type = "miter";
+                break;
+            case "erase":
+                mode = "erase";
+                type = "round";
+                break;
+        }
     };
     
     this.getMod = function() {
@@ -61,18 +76,14 @@ function SuperPaint() {
     }
 
     this.setColor = function (hex, rgba) {
-        if(currentLayer!=undefined && currentLayer!=null) {
-            currentLayer.clearQueue();
-        }
+        stopDrawing();
         color = "#" + hex;
         colorA = rgba;
     };
 
 
     this.setSize = function (newSize) {
-        if(currentLayer!=undefined && currentLayer!=null) {
-            currentLayer.clearQueue();
-        }
+        stopDrawing();
         size = newSize;
     }
 
@@ -108,14 +119,18 @@ function SuperPaint() {
         selectLayerByNum(0);
     };
 
+    function stopDrawing(){
+        if(currentLayer!=undefined && currentLayer!=null) {
+            currentLayer.clearQueue();
+        }
+    }
+
     function selectLayer(name) {
         for (var i = 0; i < layers.length; i++) {
             var layer = layers[i];
             if (layer.name() == name) {
                 layer.setEnabled(true);
-                if(currentLayer!=undefined && currentLayer!=null) {
-                    currentLayer.clearQueue();
-                }
+                stopDrawing();
                 currentLayer = layer;
             } else {
                 layer.setEnabled(false);
@@ -130,9 +145,7 @@ function SuperPaint() {
             layer.setEnabled(false);
         }
         layers[num].setEnabled(true);
-        if(currentLayer!=undefined && currentLayer!=null) {
-            currentLayer.clearQueue();
-        }
+        stopDrawing();
         currentLayer = layers[num];
         $layersSelect.val(layers[num].name());
     }
@@ -176,11 +189,11 @@ function SuperPaint() {
 
 
         this.clearQueue = function () {
+            _splice(clickX);
+            _splice(clickY);
+            _splice(clickColor);
+            _splice(clickDrag);
             context.closePath();
-            clickX.splice(0, clickX.length);
-            clickY.splice(0, clickY.length);
-            clickColor.splice(0, clickColor.length);
-            clickDrag.splice(0, clickDrag.length);
         }
 
         this.name = function () {
@@ -269,32 +282,39 @@ function SuperPaint() {
         }
 
         function redraw() {
-            context.lineJoin = type;
-            context.lineWidth = size;
+                    context.lineJoin = type;
+                    context.lineWidth = size;
 
-            for (var i = 0; i < clickX.length; i++) {
-                context.beginPath();
-                if (clickDrag[i] && i) {
-                    context.moveTo(clickX[i - 1], clickY[i - 1]);
-                } else {
-                    context.moveTo(clickX[i] - 1, clickY[i]);
-                }
-                context.lineTo(clickX[i], clickY[i]);
-                context.closePath();
-                context.strokeStyle = 'rgba('+clickColor[i].r+', '+clickColor[i].g+', '+clickColor[i].b+', '+(clickColor[i].a/255)+')';
-                context.fillStyle = 'rgba('+clickColor[i].r+', '+clickColor[i].g+', '+clickColor[i].b+', '+(clickColor[i].a/255)+')';
-                context.stroke();
+                    for (var i = 0; i < clickX.length; i++) {
+
+                        switch (mode){
+                            case "erase":
+                                context.clearRect(Math.round(clickX[i]-context.lineWidth/2), Math.round(clickY[i]-context.lineWidth/2),context.lineWidth,context.lineWidth);
+                                break;
+                            case "normal":
+                        context.beginPath();
+                        if (clickDrag[i] && i) {
+                            context.moveTo(clickX[i - 1], clickY[i - 1]);
+                        } else {
+                            context.moveTo(clickX[i] - 1, clickY[i]);
+                        }
+                        context.lineTo(clickX[i], clickY[i]);
+                        context.closePath();
+                        context.strokeStyle = 'rgba(' + clickColor[i].r + ', ' + clickColor[i].g + ', ' + clickColor[i].b + ', ' + (clickColor[i].a / 255) + ')';
+                        context.fillStyle = 'rgba(' + clickColor[i].r + ', ' + clickColor[i].g + ', ' + clickColor[i].b + ', ' + (clickColor[i].a / 255) + ')';
+                        context.stroke();
+                                break;
+                    }
+
             }
+
             if (!clickDrag[clickX.length - 1]) {
                 clickX = [];
                 clickY = [];
                 clickColor = [];
                 clickDrag = [];
             } else {
-                _splice(clickX);
-                _splice(clickY);
-                _splice(clickColor);
-                _splice(clickDrag);
+                stopDrawing();
             }
         }
 
