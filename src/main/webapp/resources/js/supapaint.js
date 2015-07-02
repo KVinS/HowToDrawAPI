@@ -314,7 +314,10 @@ function SuperPaint() {
                 clickColor = [];
                 clickDrag = [];
             } else {
-                stopDrawing();
+                clickX.splice(0,clickX.length - 2);
+                clickY.splice(0,clickY.length - 2);
+                clickColor.splice(0,clickColor.length - 2);
+                clickDrag.splice(0,clickDrag.length - 2);
             }
         }
 
@@ -322,7 +325,7 @@ function SuperPaint() {
     }
 
     function _splice(array) {
-        array.splice(0, array.length - 2);
+        array.splice(0, array.length);
     }
 
     function CanvasFloodFiller()
